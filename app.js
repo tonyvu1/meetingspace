@@ -1,6 +1,13 @@
 const express = require("express");
-
+const expressLayouts = require('express-ejs-layouts')
 const app = express();
+
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
+// EJS
+app.use(expressLayouts)
+app.set('view engine', 'ejs')
+
+
 
 // Routes
 app.use("/", require("./routes/index"));
