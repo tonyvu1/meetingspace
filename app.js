@@ -1,8 +1,11 @@
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
-const app = express();
 const mongoose = require("mongoose");
 const passport = require('passport');
+const favicon = require('serve-favicon');
+const path = require('path')
+
+const app = express();
 
 
 // Passport Config
@@ -24,7 +27,7 @@ mongoose
 // EJS
 app.use(expressLayouts);
 app.set("view engine", "ejs");
-
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 // Bodyparser
 app.use(express.urlencoded({ extended: false }));
 
