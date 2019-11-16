@@ -6,6 +6,7 @@ var favicon = require('serve-favicon');
 
 const app = express();
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
+
 // Passport Config
 require('./config/passport')(passport);
 
