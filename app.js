@@ -5,7 +5,11 @@ const passport = require("passport");
 var favicon = require("serve-favicon");
 
 // DOTENV
-require('dotenv/config')
+/***************************** HANDLE PRODUCTION *******************************/
+if (process.env.NODE_ENV !== "production") {
+  require('dotenv/config');
+}
+
 
 const app = express();
 app.use(favicon(__dirname + "/public/images/favicon.ico"));
@@ -64,6 +68,7 @@ app.use(function(req, res, next) {
 app.use("/", require("./routes/index"));
 app.use("/students", require("./routes/students"));
 app.use("/style", express.static(__dirname + "/public/style"));
+
 
 const PORT = process.env.PORT || 5000;
 
