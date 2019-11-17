@@ -3,6 +3,8 @@ const expressLayouts = require("express-ejs-layouts");
 const mongoose = require("mongoose");
 const passport = require("passport");
 var favicon = require("serve-favicon");
+
+// DOTENV
 require('dotenv/config')
 
 const app = express();
