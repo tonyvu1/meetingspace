@@ -23,7 +23,7 @@ module.exports = function(passport) {
             if (isMatch) {
               return done(null, student);
             } else {
-              return done(null, false, { message: "Password incorrect" });
+              return done(null, false, { message: "Password incorrect"});
             }
           });
         })

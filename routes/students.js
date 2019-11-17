@@ -55,7 +55,7 @@ router.post("/signup", (req, res) => {
     Student.findOne({ email: email }).then(student => {
       if (student) {
         // If user exists
-        errors.push({ msg: "Email is already signuped" });
+        errors.push({ msg: "Email is already registered" });
         res.render("signup", {
           // Pass in values and do not erase values from previous sent form
           errors,
