@@ -1,14 +1,15 @@
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const mongoose = require("mongoose");
-const passport = require('passport');
-var favicon = require('serve-favicon');
+const passport = require("passport");
+var favicon = require("serve-favicon");
+const path = require("path");
 
 const app = express();
-app.use(favicon(__dirname + '/public/images/favicon.ico'));
+app.use(favicon(__dirname + "/public/images/favicon.ico"));
 
 // Passport Config
-require('./config/passport')(passport);
+require("./config/passport")(passport);
 
 // flash and session used for passing data to redirect pages
 const flash = require("connect-flash");
@@ -60,7 +61,7 @@ app.use(function(req, res, next) {
 // Routes
 app.use("/", require("./routes/index"));
 app.use("/students", require("./routes/students"));
-app.use("/css", express.static(__dirname + "/node_modules/bootstrap/dist/css"));
+app.use("/style", express.static(__dirname + "/public/style"));
 
 const PORT = process.env.PORT || 5000;
 
