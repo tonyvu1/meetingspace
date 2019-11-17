@@ -3,7 +3,7 @@ const expressLayouts = require("express-ejs-layouts");
 const mongoose = require("mongoose");
 const passport = require("passport");
 var favicon = require("serve-favicon");
-const path = require("path");
+require('dotenv/config')
 
 const app = express();
 app.use(favicon(__dirname + "/public/images/favicon.ico"));
