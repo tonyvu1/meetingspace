@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/User");
+const Student = require("../models/Student");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
 
@@ -10,12 +10,12 @@ router.get("/login", (req, res) => {
 });
 
 // Register page
-router.get("/register", (req, res) => {
-  res.render("register", {title: "Sign Up | SideTutor"});
+router.get("/signup", (req, res) => {
+  res.render("signup", {title: "Sign Up | SideTutor"});
 });
 
 // Register Handle / POST
-router.post("/register", (req, res) => {
+router.post("/signup", (req, res) => {
   // pulling out info in const { }
   const { name, email, password, password2 } = req.body;
 
@@ -36,10 +36,10 @@ router.post("/register", (req, res) => {
     errors.push({ msg: "Password should be at least 6 characters long" });
   }
 
-  // If any of these errors is true, re-render this register page.
+  // If any of these errors is true, re-render this signup page.
   // Also, we are going to pass in values to the re-rendered page.
   if (errors.length > 0) {
-    res.render("register", {
+    res.render("signup", {
       // Pass in values and do not erase values from previous sent form
       errors,
       name,
@@ -51,12 +51,12 @@ router.post("/register", (req, res) => {
   } else {
     // Register form success
 
-    // .findOne is a mongodb method that searches for duplicate users
-    User.findOne({ email: email }).then(user => {
-      if (user) {
+    // .findOne is a mongodb method that searches for duplicate students
+    Student.findOne({ email: email }).then(student => {
+      if (student) {
         // If user exists
-        errors.push({ msg: "Email is already registered" });
-        res.render("register", {
+        errors.push({ msg: "Email is already signuped" });
+        res.render("signup", {
           // Pass in values and do not erase values from previous sent form
           errors,
           name,
@@ -68,7 +68,7 @@ router.post("/register", (req, res) => {
       } else {
         // All went well, now creating a new user
 
-        const newUser = new User({
+        const newStudent = new Student({
           name,
           email,
           password
@@ -76,21 +76,21 @@ router.post("/register", (req, res) => {
 
         // Hash Password
         bcrypt.genSalt(10, (err, salt) =>
-          bcrypt.hash(newUser.password, salt, (err, hash) => {
+          bcrypt.hash(newStudent.password, salt, (err, hash) => {
             if (err) throw err;
 
             // Set password to hashed password
-            newUser.password = hash;
+            newStudent.password = hash;
 
             // Save user. Uses a promise that gives us the user and redirects to login page
-            newUser
+            newStudent
               .save()
-              .then(user => {
+              .then(newStudent => {
                 req.flash(
                   "success_msg",
-                  "You are now registered and can log in"
+                  "You are now signed up and can log in!"
                 );
-                res.redirect("/users/login");
+                res.redirect("/students/login");
               })
               .catch(err => console.log(err));
           })
@@ -104,7 +104,7 @@ router.post("/register", (req, res) => {
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", {
     successRedirect: "/dashboard",
-    failureRedirect: "/users/login",
+    failureRedirect: "/students/login",
     failureFlash: true
   })(req, res, next);
 });
@@ -113,7 +113,7 @@ router.post("/login", (req, res, next) => {
 router.get("/logout", (req, res) => {
   req.logout();
   req.flash("success_msg", "You are logged out");
-  res.redirect("/users/login");
+  res.redirect("/students/login");
 });
 
 module.exports = router;
