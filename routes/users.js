@@ -6,12 +6,12 @@ const passport = require("passport");
 
 // Login page
 router.get("/login", (req, res) => {
-  res.render("login");
+  res.render("login", {title: "Login | SideTutor"});
 });
 
 // Register page
 router.get("/register", (req, res) => {
-  res.render("register");
+  res.render("register", {title: "Sign Up | SideTutor"});
 });
 
 // Register Handle / POST
@@ -45,7 +45,8 @@ router.post("/register", (req, res) => {
       name,
       email,
       password,
-      password2
+      password2,
+      title: "Sign Up | SideTutor"
     });
   } else {
     // Register form success
@@ -61,7 +62,8 @@ router.post("/register", (req, res) => {
           name,
           email,
           password,
-          password2
+          password2,
+          title: "Sign Up | SideTutor"
         });
       } else {
         // All went well, now creating a new user

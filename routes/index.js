@@ -3,7 +3,7 @@ const router = express.Router();
 const { ensureAuthenticated, forwardAuthenticated } = require("../config/auth");
 
 router.get("/", (req, res) => {
-  res.render("home");
+  res.render("home", {title: "Home | SideTutor"});
 });
 
 // Use ensureAuthenticated (from /config/auth.js) to PROTECT this route
