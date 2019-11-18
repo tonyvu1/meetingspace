@@ -69,7 +69,7 @@ app.use("/", require("./public/index"));
 app.use("/images", express.static(__dirname + "/public/images"));
 app.use("/students", require("./routes/students"));
 app.use("/style", express.static(__dirname + "/public/style"));
-
+app.use("/animations", express.static(__dirname + "/views"));
 
 const PORT = process.env.PORT || 5000;
 

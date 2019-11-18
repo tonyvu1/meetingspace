@@ -20,5 +20,40 @@
     </div>
     <script src="/style/jquery/dist/jquery.js"></script>
     <script src="/style/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="https://unpkg.com/scrollreveal"></script>
   </body>
 </html>
+
+<script>
+  window.sr = ScrollReveal();
+  sr.reveal(".left-slide", {
+    duration: 2000,
+    origin: "left",
+    distance: "300px"
+  });
+  sr.reveal(".nav-appear", {
+    duration: 1000,
+    origin: "top",
+    distance: "100px"
+  });
+  sr.reveal(".left-appear", {
+    duration: 2000,
+    origin: "left",
+    distance: "300px",
+    viewFactor: 0.2
+  });
+  sr.reveal(".left-appear-slow", {
+    duration: 2000,
+    delay: 300,
+    origin: "left",
+    distance: "300px",
+    viewFactor: 0.2
+  });
+  sr.reveal(".left-appear-slowest", {
+    duration: 2000,
+    delay: 500,
+    origin: "left",
+    distance: "300px",
+    viewFactor: 0.2
+  });
+</script>
