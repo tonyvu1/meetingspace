@@ -65,7 +65,8 @@ app.use(function(req, res, next) {
 });
 
 // Routes
-app.use("/", require("./routes/index"));
+app.use("/", require("./public/index"));
+app.use("/images", express.static(__dirname + "/public/images"));
 app.use("/students", require("./routes/students"));
 app.use("/style", express.static(__dirname + "/public/style"));
 

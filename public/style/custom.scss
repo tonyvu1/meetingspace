@@ -1,5 +1,10 @@
+html {
+  scroll-behavior: smooth;
+}
+
 $theme-colors: (
-    "primary" : #f0ad4e
+  "primary": #f0ad4e,
+  "secondary": #1d809f
 );
 
 @import "bootstrap/scss/bootstrap";

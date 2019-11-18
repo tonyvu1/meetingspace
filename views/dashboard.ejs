@@ -1,3 +1,13 @@
-<h1 class="mt-4">Dashboard</h1>
-<p class="lead mb-3">Welcome <%= name %></p>
-<a href="/students/logout" class="btn btn-secondary">Logout</a>
+<header>
+  <% include partials/nav.ejs %>
+</header>
+
+
+<div class="container text-center my-auto" style="background:transparent url('../public/images/pencils.jpg') no-repeat center center /cover">
+    <h1 class="mb-4 mt-5">Welcome back, <%= name %>!</h1>
+    <a class="btn btn-primary btn-xl js-scroll-trigger" href="/students/logout"
+      >Logout</a
+    >
+  </div>
+  <div class="overlay"></div>
+  

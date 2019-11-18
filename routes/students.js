@@ -6,12 +6,26 @@ const passport = require("passport");
 
 // Login page
 router.get("/login", (req, res) => {
-  res.render("login", {title: "Login | SideTutor"});
+  if (req.user) {
+    res.render("dashboard", {
+      title: "Student | SideTutor",
+      name: req.user.name // has to be "user" here. user is global language specific var
+    });
+  } else {
+    res.render("login", { title: "Login | SideTutor" });
+  }
 });
 
 // Register page
 router.get("/signup", (req, res) => {
-  res.render("signup", {title: "Sign Up | SideTutor"});
+  if (req.user) {
+    res.render("dashboard", {
+      title: "Student | SideTutor",
+      name: req.user.name // has to be "user" here. user is global language specific var
+    });
+  } else {
+    res.render("signup", { title: "Sign Up | SideTutor" });
+  }
 });
 
 // Register Handle / POST
@@ -23,17 +37,17 @@ router.post("/signup", (req, res) => {
 
   // Check required fields
   if (!name || !email || !password || !password2) {
-    errors.push({ msg: "Please fill in all fields" });
+    errors.push({ msg: "Please fill in all fields." });
   }
 
   // Check passwords match
   if (password !== password2) {
-    errors.push({ msg: "Passwords do not match" });
+    errors.push({ msg: "Passwords must match." });
   }
 
   // Check password length
   if (password.length < 6) {
-    errors.push({ msg: "Password should be at least 6 characters long" });
+    errors.push({ msg: "Your password should be at least 6 characters long." });
   }
 
   // If any of these errors is true, re-render this signup page.
@@ -55,7 +69,7 @@ router.post("/signup", (req, res) => {
     Student.findOne({ email: email }).then(student => {
       if (student) {
         // If user exists
-        errors.push({ msg: "Email is already registered" });
+        errors.push({ msg: "That email is already in use." });
         res.render("signup", {
           // Pass in values and do not erase values from previous sent form
           errors,
@@ -88,7 +102,7 @@ router.post("/signup", (req, res) => {
               .then(newStudent => {
                 req.flash(
                   "success_msg",
-                  "You are now signed up and can log in!"
+                  "You are now signed up! Please log in below."
                 );
                 res.redirect("/students/login");
               })
@@ -112,7 +126,7 @@ router.post("/login", (req, res, next) => {
 // Logout
 router.get("/logout", (req, res) => {
   req.logout();
-  req.flash("success_msg", "You are logged out");
+  req.flash("success_msg", "You have logged out.");
   res.redirect("/students/login");
 });
 

@@ -2,13 +2,46 @@
   <% include partials/nav.ejs %>
 </header>
 
-<div class="container text-center my-auto" style="background:transparent url('../public/images/pencils.jpg') no-repeat center center /cover">
-  <h1 class="mb-4 mt-5">Learn English Online</h1>
-  <h3 class="mb-5">
-    <em>Our tutors are North American natives ready to teach!</em>
-  </h3>
-  <a class="btn btn-primary btn-xl js-scroll-trigger" href="#about"
-    >Find Out More</a
-  >
+<div class="container-full d-flex align-items-center" id="home-front">
+  <div class="container text-center my-auto">
+    <h1 class="mb-4">Online English Lessons</h1>
+    <h3 class="mb-5">
+      <em>Learning made easy</em>
+    </h3>
+    <a class="btn btn-secondary" href="#home">Find Out More</a>
+  </div>
 </div>
-<div class="overlay"></div>
+
+<div class="container d-flex align-items-center" id="home">
+  <div class="container text-center my-auto">
+    <h1 class="mb-4">SideTutor</h1>
+    <h3 class="mb-5">
+      <em>Our tutors are North American natives ready to teach!</em>
+    </h3>
+    <a class="btn btn-secondary" href="#about">Find Out More</a>
+  </div>
+</div>
+
+<div class="container-full d-flex align-items-center" id="home">
+  <div class="container text-center my-auto">
+    <h1 class="mb-4">Learn English Online</h1>
+    <h3 class="mb-5">
+      <em>Our tutors are North American natives ready to teach!</em>
+    </h3>
+    <a class="btn btn-secondary" href="#about">Find Out More</a>
+  </div>
+</div>
+
+<style>
+  #home-front {
+    background: transparent url("/images/desk.jpg") no-repeat center center /
+      cover;
+    height: 90vh;
+    width: 90%;
+    margin: auto;
+  }
+
+  #home {
+    height: 80vh;
+  }
+</style>
