@@ -15,7 +15,6 @@ app.use((req, res, next) => {
   }
 });
 app.use(express.static("build"));
-
 app.use(function(req, res, next) {
   var sslUrl;
 
@@ -29,7 +28,6 @@ app.use(function(req, res, next) {
 
   return next();
 });
-
 var https_redirect = function(req, res, next) {
   if (process.env.NODE_ENV === "production") {
     if (req.headers["x-forwarded-proto"] != "https") {
@@ -41,7 +39,6 @@ var https_redirect = function(req, res, next) {
     return next();
   }
 };
-
 app.use(https_redirect); 
 
 
@@ -113,8 +110,12 @@ app.use("/style", express.static(__dirname + "/public/style"));
 app.use("/animations", express.static(__dirname + "/views"));
 
 // TEST
-app.get("/chat", (req, res) => {
-  res.render("chat", { title: "Student | SideTutor" });
+app.get("/chat1", (req, res) => {
+  res.render("chat1", { title: "Firebase | SideTutor" });
+});
+
+app.get("/chat2", (req, res) => {
+  res.render("chat2", { title: "Scaledrone | SideTutor" });
 });
 
 const PORT = process.env.PORT || 5000;

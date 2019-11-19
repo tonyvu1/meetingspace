@@ -3,21 +3,12 @@
 </header>
 
 <body onload="showMyFace()">
-  <h1>Room 1</h1>
+  <h1 class="text-center">FIREBASE</h1>
 
   <video id="yourVideo" autoplay muted playsinline></video>
   <video id="friendsVideo" autoplay playsinline></video>
 
   <br />
-
-  <button
-    onclick="showFriendsFace()"
-    type="button"
-    class="btn btn-primary btn-lg"
-  >
-    <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
-    Call
-  </button>
 
   <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
 </body>
@@ -25,7 +16,6 @@
 <script>
   var databaseURL = "https://video-chat-bdca6.firebaseio.com";
 
-  //Create an account on Firebase, and use the credentials they give you in place of the following
   var config = {
     apiKey: "AIzaSyAeFH3r8KpOQmMvw2BX2YnIk0bhEUaWD8o",
     authDomain: "video-chat-bdca6.firebaseapp.com",
@@ -45,16 +35,10 @@
 
   var yourId = Math.floor(Math.random() * 1000000000);
 
-  //Create an account on Viagenie (http://numb.viagenie.ca/), and replace {'urls': 'turn:numb.viagenie.ca','credential': 'websitebeaver','username': 'websitebeaver@email.com'} with the information from your account
   var servers = {
     iceServers: [
       { urls: "stun:stun.services.mozilla.com" },
-      { urls: "stun:stun.l.google.com:19302" },
-      {
-        urls: "turn:numb.viagenie.ca",
-        credential: "tonyvu1",
-        username: "tonyvu.dev@gmail.com"
-      }
+      { urls: "stun:stun.l.google.com:19302" }
     ]
   };
 
