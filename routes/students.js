@@ -21,7 +21,7 @@ router.get("/signup", (req, res) => {
   if (req.user) {
     res.render("dashboard", {
       title: "Student | SideTutor",
-      name: req.user.name // has to be "user" here. user is global language specific var
+      name: req.user.name 
     });
   } else {
     res.render("signup", { title: "Sign Up | SideTutor" });

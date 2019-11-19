@@ -7,9 +7,8 @@ var favicon = require("serve-favicon");
 // DOTENV
 /***************************** HANDLE PRODUCTION *******************************/
 if (process.env.NODE_ENV !== "production") {
-  require('dotenv/config');
+  require("dotenv/config");
 }
-
 
 const app = express();
 app.use(favicon(__dirname + "/public/images/favicon.ico"));
@@ -70,6 +69,11 @@ app.use("/images", express.static(__dirname + "/public/images"));
 app.use("/students", require("./routes/students"));
 app.use("/style", express.static(__dirname + "/public/style"));
 app.use("/animations", express.static(__dirname + "/views"));
+
+// TEST
+app.get("/chat", (req, res) => {
+  res.render("chat", { title: "Student | SideTutor" });
+});
 
 const PORT = process.env.PORT || 5000;
 
