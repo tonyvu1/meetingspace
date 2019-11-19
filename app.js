@@ -3,6 +3,48 @@ const expressLayouts = require("express-ejs-layouts");
 const mongoose = require("mongoose");
 const passport = require("passport");
 var favicon = require("serve-favicon");
+const app = express();
+
+/******************** FORCE HTTPS (UNCOMMENT WHEN DEPLOY) *********************/
+
+app.use((req, res, next) => {
+  if (req.header("x-forwarded-proto") !== "https") {
+    res.redirect(`https://${req.header("host")}${req.url}`);
+  } else {
+    next();
+  }
+});
+app.use(express.static("build"));
+
+app.use(function(req, res, next) {
+  var sslUrl;
+
+  if (
+    process.env.NODE_ENV === "production" &&
+    req.headers["x-forwarded-proto"] !== "https"
+  ) {
+    sslUrl = ["https://sidetutor.com", req.url].join("");
+    return res.redirect(sslUrl);
+  }
+
+  return next();
+});
+
+var https_redirect = function(req, res, next) {
+  if (process.env.NODE_ENV === "production") {
+    if (req.headers["x-forwarded-proto"] != "https") {
+      return res.redirect("https://" + req.headers.host + req.url);
+    } else {
+      return next();
+    }
+  } else {
+    return next();
+  }
+};
+
+app.use(https_redirect); 
+
+
 
 // DOTENV
 /***************************** HANDLE PRODUCTION *******************************/
@@ -10,7 +52,7 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv/config");
 }
 
-const app = express();
+
 app.use(favicon(__dirname + "/public/images/favicon.ico"));
 
 // Passport Config
