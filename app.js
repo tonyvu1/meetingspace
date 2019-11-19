@@ -115,7 +115,11 @@ app.get("/chat1", (req, res) => {
 });
 
 app.get("/chat2", (req, res) => {
-  res.render("chat2", { title: "Scaledrone | SideTutor" });
+  res.render("chat2", { title: "Scaledrone 1 | SideTutor" });
+});
+
+app.get("/chat3", (req, res) => {
+  res.render("chat3", { title: "Scaledrone 2 | SideTutor" });
 });
 
 const PORT = process.env.PORT || 5000;
