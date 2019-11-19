@@ -41,14 +41,11 @@ var https_redirect = function(req, res, next) {
 };
 app.use(https_redirect);  */
 
-
-
 // DOTENV
 /***************************** HANDLE PRODUCTION *******************************/
 if (process.env.NODE_ENV !== "production") {
   require("dotenv/config");
 }
-
 
 app.use(favicon(__dirname + "/public/images/favicon.ico"));
 
@@ -115,11 +112,20 @@ app.get("/chat1", (req, res) => {
 });
 
 app.get("/chat2", (req, res) => {
-  res.render("chat2", { title: "Scaledrone 1 | SideTutor" });
+  res.render("chat2", {
+    title: "Scaledrone 1 | SideTutor",
+    scaledrone: process.env.SCALEDRONE_ID,
+    stun_url: process.env.STUN_URL,
+    stun_user: process.env.STUN_USER,
+    stun_cred: process.env.STUN_CRED
+  });
 });
 
 app.get("/chat3", (req, res) => {
-  res.render("chat3", { title: "Scaledrone 2 | SideTutor" });
+  res.render("chat3", {
+    title: "Scaledrone 2 | SideTutor",
+    scaledrone: "asdf"
+  });
 });
 
 const PORT = process.env.PORT || 5000;
