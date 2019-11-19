@@ -124,7 +124,10 @@ app.get("/chat2", (req, res) => {
 app.get("/chat3", (req, res) => {
   res.render("chat3", {
     title: "Scaledrone 2 | SideTutor",
-    scaledrone: "asdf"
+    scaledrone: process.env.SCALEDRONE_ID,
+    stun_url: process.env.STUN_URL,
+    stun_user: process.env.STUN_USER,
+    stun_cred: process.env.STUN_CRED
   });
 });
 
