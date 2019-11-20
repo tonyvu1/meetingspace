@@ -2,172 +2,335 @@
   <% include partials/nav.ejs %>
 </header>
 <body>
-  <h1 class="text-center">SCALEDRONE</h1>
-  <video id="localVideo" autoplay muted></video>
-  <video id="remoteVideo" autoplay></video>
+  <div class="members-count">-</div>
+  <div class="members-list">-</div>
+  <div class="messages"></div>
+  <form class="message-form" onsubmit="return false;">
+    <input
+      class="message-form__input"
+      placeholder="Type a message.."
+      type="text"
+    />
+    <input class="message-form__button" value="Send" type="submit" />
+  </form>
   <script
     type="text/javascript"
     src="https://cdn.scaledrone.com/scaledrone.min.js"
   ></script>
 </body>
 
-<script>
-  // Generate random room name if needed
-
-  const roomHash = "coolroom";
-
-  // TODO : Replace with your own channel ID
-  const drone = new ScaleDrone("<%= scaledrone %>");
-
-  // Room name needs to be prefixed with 'observable-'
-  const roomName = "observable-" + roomHash;
-  const configuration = {
-    iceServers: [
-      { urls: "stun:stun.services.mozilla.com" },
-      { urls: "stun:stun.l.google.com:19302" },
-      {
-        urls: ["<%= stun_url %>"]
-      },
-      {
-        username: "<%= stun_user %>",
-        credential: "<%= stun_cred %>",
-        urls: [
-          "turn:u3.xirsys.com:80?transport=udp",
-          "turn:u3.xirsys.com:3478?transport=udp",
-          "turn:u3.xirsys.com:80?transport=tcp",
-          "turn:u3.xirsys.com:3478?transport=tcp",
-          "turns:u3.xirsys.com:443?transport=tcp",
-          "turns:u3.xirsys.com:5349?transport=tcp"
-        ]
-      }
-    ]
-  };
-  let room;
-  let pc;
-
-  function onSuccess() {}
-  function onError(error) {
-    console.error(error);
+<style>
+  body {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 13px;
+    display: flex;
+    flex-direction: column;
+    max-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   }
+
+  .members-count,
+  .members-list,
+  .messages {
+    border: 1px solid #e4e4e4;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  .messages {
+    flex-shrink: 1;
+    overflow: auto;
+  }
+
+  .message {
+    padding: 5px 0;
+  }
+  .message .member {
+    display: inline-block;
+  }
+
+  .member {
+    padding-right: 10px;
+    position: relative;
+  }
+
+  .message-form {
+    display: flex;
+    flex-shrink: 0;
+  }
+  .message-form__input {
+    flex-grow: 1;
+    border: 1px solid #dfdfdf;
+    padding: 10px 15px;
+    font-size: 16px;
+  }
+  .message-form__button {
+    margin: 10px;
+  }
+</style>
+
+<script>
+  // PS! Replace this with your own channel ID
+  // If you use this channel ID your app will stop working in the future
+  const CLIENT_ID = "<%= scaledrone %>";
+
+  const drone = new ScaleDrone(CLIENT_ID, {
+    data: {
+      // Will be sent out as clientData via events
+      name: getRandomName(),
+      color: getRandomColor()
+    }
+  });
+
+  let members = [];
 
   drone.on("open", error => {
     if (error) {
       return console.error(error);
     }
-    room = drone.subscribe(roomName);
+    console.log("Successfully connected to Scaledrone");
+
+    const room = drone.subscribe("observable-room");
     room.on("open", error => {
       if (error) {
-        onError(error);
+        return console.error(error);
       }
+      console.log("Successfully joined room");
     });
-    // We're connected to the room and received an array of 'members'
-    // connected to the room (including us). Signaling server is ready.
-    room.on("members", members => {
-      console.log("MEMBERS", members);
-      // If we are the second user to connect to the room we will be creating the offer
-      const isOfferer = members.length === 2;
-      startWebRTC(isOfferer);
+
+    room.on("members", m => {
+      members = m;
+      updateMembersDOM();
+    });
+
+    room.on("member_join", member => {
+      members.push(member);
+      updateMembersDOM();
+    });
+
+    room.on("member_leave", ({ id }) => {
+      const index = members.findIndex(member => member.id === id);
+      members.splice(index, 1);
+      updateMembersDOM();
+    });
+
+    room.on("data", (text, member) => {
+      if (member) {
+        addMessageToListDOM(text, member);
+      } else {
+        // Message is from server
+      }
     });
   });
 
-  // Send signaling data via Scaledrone
-  function sendMessage(message) {
-    drone.publish({
-      room: roomName,
-      message
-    });
-  }
+  drone.on("close", event => {
+    console.log("Connection was closed", event);
+  });
 
-  function startWebRTC(isOfferer) {
-    pc = new RTCPeerConnection(configuration);
+  drone.on("error", error => {
+    console.error(error);
+  });
 
-    // 'onicecandidate' notifies us whenever an ICE agent needs to deliver a
-    // message to the other peer through the signaling server
-    pc.onicecandidate = event => {
-      if (event.candidate) {
-        sendMessage({ candidate: event.candidate });
-      }
-    };
-
-    // If user is offerer let the 'negotiationneeded' event create the offer
-    if (isOfferer) {
-      pc.onnegotiationneeded = () => {
-        pc.createOffer()
-          .then(localDescCreated)
-          .catch(onError);
-      };
-    }
-
-    // When a remote stream arrives display it in the #remoteVideo element
-    pc.ontrack = event => {
-      const stream = event.streams[0];
-      if (!remoteVideo.srcObject || remoteVideo.srcObject.id !== stream.id) {
-        remoteVideo.srcObject = stream;
-      }
-    };
-
-    navigator.mediaDevices
-      .getUserMedia({
-        audio: true,
-        video: true
-      })
-      .then(stream => {
-        // Display your local video in #localVideo element
-        localVideo.srcObject = stream;
-        // Add your stream to be sent to the conneting peer
-        stream.getTracks().forEach(track => pc.addTrack(track, stream));
-      }, onError);
-
-    // Listen to signaling data from Scaledrone
-    room.on("data", (message, client) => {
-      // Message was sent by us
-      if (client.id === drone.clientId) {
-        return;
-      }
-
-      if (message.sdp) {
-        // This is called after receiving an offer or answer from another peer
-        pc.setRemoteDescription(
-          new RTCSessionDescription(message.sdp),
-          () => {
-            // When receiving an offer lets answer it
-            if (pc.remoteDescription.type === "offer") {
-              pc.createAnswer()
-                .then(localDescCreated)
-                .catch(onError);
-            }
-          },
-          onError
-        );
-      } else if (message.candidate) {
-        // Add the new ICE candidate to our connections remote description
-        pc.addIceCandidate(
-          new RTCIceCandidate(message.candidate),
-          onSuccess,
-          onError
-        );
-      }
-    });
-  }
-
-  function localDescCreated(desc) {
-    pc.setLocalDescription(
-      desc,
-      () => sendMessage({ sdp: pc.localDescription }),
-      onError
+  function getRandomName() {
+    const adjs = [
+      "autumn",
+      "hidden",
+      "bitter",
+      "misty",
+      "silent",
+      "empty",
+      "dry",
+      "dark",
+      "summer",
+      "icy",
+      "delicate",
+      "quiet",
+      "white",
+      "cool",
+      "spring",
+      "winter",
+      "patient",
+      "twilight",
+      "dawn",
+      "crimson",
+      "wispy",
+      "weathered",
+      "blue",
+      "billowing",
+      "broken",
+      "cold",
+      "damp",
+      "falling",
+      "frosty",
+      "green",
+      "long",
+      "late",
+      "lingering",
+      "bold",
+      "little",
+      "morning",
+      "muddy",
+      "old",
+      "red",
+      "rough",
+      "still",
+      "small",
+      "sparkling",
+      "throbbing",
+      "shy",
+      "wandering",
+      "withered",
+      "wild",
+      "black",
+      "young",
+      "holy",
+      "solitary",
+      "fragrant",
+      "aged",
+      "snowy",
+      "proud",
+      "floral",
+      "restless",
+      "divine",
+      "polished",
+      "ancient",
+      "purple",
+      "lively",
+      "nameless"
+    ];
+    const nouns = [
+      "waterfall",
+      "river",
+      "breeze",
+      "moon",
+      "rain",
+      "wind",
+      "sea",
+      "morning",
+      "snow",
+      "lake",
+      "sunset",
+      "pine",
+      "shadow",
+      "leaf",
+      "dawn",
+      "glitter",
+      "forest",
+      "hill",
+      "cloud",
+      "meadow",
+      "sun",
+      "glade",
+      "bird",
+      "brook",
+      "butterfly",
+      "bush",
+      "dew",
+      "dust",
+      "field",
+      "fire",
+      "flower",
+      "firefly",
+      "feather",
+      "grass",
+      "haze",
+      "mountain",
+      "night",
+      "pond",
+      "darkness",
+      "snowflake",
+      "silence",
+      "sound",
+      "sky",
+      "shape",
+      "surf",
+      "thunder",
+      "violet",
+      "water",
+      "wildflower",
+      "wave",
+      "water",
+      "resonance",
+      "sun",
+      "wood",
+      "dream",
+      "cherry",
+      "tree",
+      "fog",
+      "frost",
+      "voice",
+      "paper",
+      "frog",
+      "smoke",
+      "star"
+    ];
+    return (
+      adjs[Math.floor(Math.random() * adjs.length)] +
+      "_" +
+      nouns[Math.floor(Math.random() * nouns.length)]
     );
   }
-</script>
 
-<style>
-  video {
-    width: 30%;
-    margin: 50px 50px;
-    padding: 0;
-    box-shadow: rgba(156, 172, 172, 0.2) 0px 2px 2px,
-      rgba(156, 172, 172, 0.2) 0px 4px 4px, rgba(156, 172, 172, 0.2) 0px 8px 8px,
-      rgba(156, 172, 172, 0.2) 0px 16px 16px,
-      rgba(156, 172, 172, 0.2) 0px 32px 32px,
-      rgba(156, 172, 172, 0.2) 0px 64px 64px;
+  function getRandomColor() {
+    return "#" + Math.floor(Math.random() * 0xffffff).toString(16);
   }
-</style>
+
+  //------------- DOM STUFF
+
+  const DOM = {
+    membersCount: document.querySelector(".members-count"),
+    membersList: document.querySelector(".members-list"),
+    messages: document.querySelector(".messages"),
+    input: document.querySelector(".message-form__input"),
+    form: document.querySelector(".message-form")
+  };
+
+  DOM.form.addEventListener("submit", sendMessage);
+
+  function sendMessage() {
+    const value = DOM.input.value;
+    if (value === "") {
+      return;
+    }
+    DOM.input.value = "";
+    drone.publish({
+      room: "observable-room",
+      message: value
+    });
+  }
+
+  function createMemberElement(member) {
+    const { name, color } = member.clientData;
+    const el = document.createElement("div");
+    el.appendChild(document.createTextNode(name));
+    el.className = "member";
+    el.style.color = color;
+    return el;
+  }
+
+  function updateMembersDOM() {
+    DOM.membersCount.innerText = `${members.length} users in room:`;
+    DOM.membersList.innerHTML = "";
+    members.forEach(member =>
+      DOM.membersList.appendChild(createMemberElement(member))
+    );
+  }
+
+  function createMessageElement(text, member) {
+    const el = document.createElement("div");
+    el.appendChild(createMemberElement(member));
+    el.appendChild(document.createTextNode(text));
+    el.className = "message";
+    return el;
+  }
+
+  function addMessageToListDOM(text, member) {
+    const el = DOM.messages;
+    const wasTop = el.scrollTop === el.scrollHeight - el.clientHeight;
+    el.appendChild(createMessageElement(text, member));
+    if (wasTop) {
+      el.scrollTop = el.scrollHeight - el.clientHeight;
+    }
+  }
+</script>
