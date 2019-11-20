@@ -3,32 +3,63 @@ const router = express.Router();
 const Student = require("../models/Student");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
+const { ensureAuthenticatedStudent, forwardAuthenticatedStudent } = require("../config/auth");
 
-// Login page
+
+// Use ensureAuthenticated (from /config/auth.js) to PROTECT this route
+router.get("/dashboard", ensureAuthenticatedStudent, (req, res) => {
+  res.render("dashboard_student", {
+    title: "Student | SideTutor",
+    name: req.user.name // has to be "user" here. user is global language specific var
+  });
+});
+
+router.get("/chat", (req, res) => {
+  res.render("chat2", {
+    title: "Scaledrone 1 | SideTutor",
+    name: req.user.name,
+    scaledrone: process.env.SCALEDRONE_ID,
+    stun_url: process.env.STUN_URL,
+    stun_user: process.env.STUN_USER,
+    stun_cred: process.env.STUN_CRED
+  });
+});
+
+// GETTING LOGIN PAGE
 router.get("/login", (req, res) => {
   if (req.user) {
-    res.render("dashboard", {
-      title: "Student | SideTutor",
-      name: req.user.name // has to be "user" here. user is global language specific var
-    });
+    res.redirect("/students/dashboard");
   } else {
     res.render("login", { title: "Login | SideTutor" });
   }
 });
 
-// Register page
+// POSTING TO LOGIN PAGE TO LOG IN USER
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local", {
+    successRedirect: "/students/dashboard",
+    failureRedirect: "/students/login",
+    failureFlash: true
+  })(req, res, next);
+});
+
+// GETTING LOGOUT TO LOGOUT USER
+router.get("/logout", (req, res) => {
+  req.logout();
+  req.flash("success_msg", "You have logged out.");
+  res.redirect("/students/login");
+});
+
+// GETTING SIGN UP PAGE
 router.get("/signup", (req, res) => {
   if (req.user) {
-    res.render("dashboard", {
-      title: "Student | SideTutor",
-      name: req.user.name 
-    });
+    res.redirect("/students/dashboard");
   } else {
     res.render("signup", { title: "Sign Up | SideTutor" });
   }
 });
 
-// Register Handle / POST
+// POSTING TO SIGNUP NEW USER
 router.post("/signup", (req, res) => {
   // pulling out info in const { }
   const { name, email, password, password2 } = req.body;
@@ -114,20 +145,8 @@ router.post("/signup", (req, res) => {
   }
 });
 
-// Login
-router.post("/login", (req, res, next) => {
-  passport.authenticate("local", {
-    successRedirect: "/dashboard",
-    failureRedirect: "/students/login",
-    failureFlash: true
-  })(req, res, next);
-});
-
-// Logout
-router.get("/logout", (req, res) => {
-  req.logout();
-  req.flash("success_msg", "You have logged out.");
-  res.redirect("/students/login");
-});
 
 module.exports = router;
+
+
+

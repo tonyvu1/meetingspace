@@ -3,6 +3,18 @@
 </header>
 <body>
   <h1 class="text-center">SCALEDRONE</h1>
+  <div class="members-count">-</div>
+  <div class="members-list">-</div>
+  <div class="messages"></div>
+  <form class="message-form" onsubmit="return false;">
+    <input
+      class="message-form__input"
+      placeholder="Type a message.."
+      type="text"
+    />
+    <input class="message-form__button" value="Send" type="submit" />
+  </form>
+
   <video id="localVideo" autoplay muted></video>
   <video id="remoteVideo" autoplay></video>
   <script
@@ -16,8 +28,13 @@
 
   const roomHash = "usernametest";
 
-  // TODO: Replace with your own channel ID
-  const drone = new ScaleDrone("<%= scaledrone %>");
+  const drone = new ScaleDrone("<%= scaledrone %>", {
+    data: {
+      // Will be sent out as clientData via events
+      name: "<%= name %>",
+      color: "#1d809f"
+    }
+  });
 
   // Room name needs to be prefixed with 'observable-'
   const roomName = "observable-" + roomHash;
@@ -44,6 +61,7 @@
   };
   let room;
   let pc;
+  let members = [];
 
   function onSuccess() {}
   function onError(error) {
@@ -62,12 +80,39 @@
     });
     // We're connected to the room and received an array of 'members'
     // connected to the room (including us). Signaling server is ready.
-    room.on("members", members => {
-      console.log("MEMBERS", members);
+    room.on("members", m => {
+      console.log("MEMBERS", m);
+
       // If we are the second user to connect to the room we will be creating the offer
-      const isOfferer = members.length === 2;
+      const isOfferer = m.length === 2;
       startWebRTC(isOfferer);
     });
+
+    room.on("members", m => {
+      members = m;
+      updateMembersDOM();
+    });
+
+    room.on("member_join", member => {
+      members.push(member);
+      updateMembersDOM();
+    });
+
+    room.on("member_leave", ({ id }) => {
+      const index = members.findIndex(member => member.id === id);
+      members.splice(index, 1);
+      updateMembersDOM();
+    });
+
+    
+  });
+
+  drone.on("close", event => {
+    console.log("Connection was closed", event);
+  });
+
+  drone.on("error", error => {
+    console.error(error);
   });
 
   // Send signaling data via Scaledrone
@@ -157,6 +202,62 @@
       onError
     );
   }
+
+  const DOM = {
+    membersCount: document.querySelector(".members-count"),
+    membersList: document.querySelector(".members-list"),
+    messages: document.querySelector(".messages"),
+    input: document.querySelector(".message-form__input"),
+    form: document.querySelector(".message-form")
+  };
+
+  DOM.form.addEventListener("submit", sendText);
+
+  function sendText() {
+    const value = DOM.input.value;
+    if (value === "") {
+      return;
+    }
+    DOM.input.value = "";
+    drone.publish({
+      room: "observable-room",
+      message: value
+    });
+  }
+
+  function createMemberElement(member) {
+    const { name, color } = member.clientData;
+    const el = document.createElement("div");
+    el.appendChild(document.createTextNode(name));
+    el.className = "member";
+    el.style.color = color;
+    return el;
+  }
+
+  function updateMembersDOM() {
+    DOM.membersCount.innerText = `${members.length} users in room:`;
+    DOM.membersList.innerHTML = "";
+    members.forEach(member =>
+      DOM.membersList.appendChild(createMemberElement(member))
+    );
+  }
+
+  function createMessageElement(text, member) {
+    const el = document.createElement("div");
+    el.appendChild(createMemberElement(member));
+    el.appendChild(document.createTextNode(text));
+    el.className = "message";
+    return el;
+  }
+
+  function addMessageToListDOM(text, member) {
+    const el = DOM.messages;
+    const wasTop = el.scrollTop === el.scrollHeight - el.clientHeight;
+    el.appendChild(createMessageElement(text, member));
+    if (wasTop) {
+      el.scrollTop = el.scrollHeight - el.clientHeight;
+    }
+  }
 </script>
 
 <style>
@@ -169,5 +270,44 @@
       rgba(156, 172, 172, 0.2) 0px 16px 16px,
       rgba(156, 172, 172, 0.2) 0px 32px 32px,
       rgba(156, 172, 172, 0.2) 0px 64px 64px;
+  }
+
+  .members-count,
+  .members-list,
+  .messages {
+    border: 1px solid #e4e4e4;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  .messages {
+    flex-shrink: 1;
+    overflow: auto;
+  }
+
+  .message {
+    padding: 5px 0;
+  }
+  .message .member {
+    display: inline-block;
+  }
+
+  .member {
+    padding-right: 10px;
+    position: relative;
+  }
+
+  .message-form {
+    display: flex;
+    flex-shrink: 0;
+  }
+  .message-form__input {
+    flex-grow: 1;
+    border: 1px solid #dfdfdf;
+    padding: 10px 15px;
+    font-size: 16px;
+  }
+  .message-form__button {
+    margin: 10px;
   }
 </style>
