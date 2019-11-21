@@ -1,3 +1,5 @@
+
+let twilio = require("twilio");
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const mongoose = require("mongoose");
@@ -42,6 +44,36 @@ var https_redirect = function(req, res, next) {
 app.use(https_redirect);  */
 
 // DOTENV
+
+/***************************** TWILIO CHAT *******************************/
+const AccessToken = twilio.jwt.AccessToken;
+const ChatGrant = AccessToken.ChatGrant;
+
+app.get("/token", function(req, res) {
+  let username = req.query.username;
+  console.log("username is: ", username);
+  let token = new AccessToken(
+    process.env.ACCOUNT_SID,
+    process.env.API_SID,
+    process.env.API_SECRET,
+    {
+      identity: username,
+      ttl: 40000
+    }
+  );
+
+  let grant = new ChatGrant({ serviceSid: process.env.SERVICE_SID });
+
+  token.addGrant(grant);
+  const tokenJwt = token.toJwt();
+  console.log("token: " + tokenJwt);
+
+  res.send(tokenJwt);
+});
+
+
+
+
 /***************************** HANDLE PRODUCTION *******************************/
 if (process.env.NODE_ENV !== "production") {
   require("dotenv/config");
@@ -76,7 +108,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
-    cookie:{_expires : 60000},
+    cookie:{_expires : 43200000},
     resave: true,
     saveUninitialized: true
   })
