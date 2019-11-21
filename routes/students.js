@@ -17,7 +17,6 @@ router.get("/dashboard", ensureAuthenticatedStudent, (req, res) => {
 router.get("/chat", (req, res) => {
   res.render("chat2", {
     title: "Scaledrone 1 | SideTutor",
-    name: req.user.name,
     scaledrone: process.env.SCALEDRONE_ID,
     stun_url: process.env.STUN_URL,
     stun_user: process.env.STUN_USER,
