@@ -3,37 +3,54 @@
 </header>
 
 <body>
-  <h1 class="text-center">SCALEDRONE</h1>
-  <video id="localVideo" autoplay muted></video>
-  <video id="remoteVideo" autoplay></video>
 
-  <div class="row form-group mt-5" id="chat-wrapper">
-    <div
-      class="col-xs-12 col-md-8 col-lg-3 col-lg-offset-2 ml-auto"
-      id="chat-body"
-    >
-      <div class="panel panel-primary">
-        <div class="panel-heading text-center">
-          <span class="glyphicon glyphicon-comment"></span>
-          <strong>Classroom Chat</strong>
-        </div>
-        <div class="panel-body body-panel">
-          <ul class="chat"></ul>
-        </div>
-        <div class="panel-footer clearfix">
-          <input id="message" class="form-control" type="text" disabled />
-          <span
-            class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-xs-12"
-            style="margin-top: 10px"
-          >
-            <button class="btn btn-warning btn-lg btn-block" id="btn-chat">
-              Send
-            </button>
-          </span>
-        </div>
+  <div class="col-12 justify-content-center" id="classroom-container">
+
+      <div class="row justify-content-center">
+       
+          <video class="col-7" id="remoteVideo" autoplay></video>
+
+   
+          <div class="col-4" id="chat-wrapper">
+              <div
+                class="col-md-12"
+                id="chat-body"
+              >
+                <div class="panel panel-primary">
+                  <div class="panel-heading text-center">
+                    <span class="glyphicon glyphicon-comment"></span>
+                    <strong>Classroom Chat</strong>
+                  </div>
+                  <div class="panel-body body-panel">
+                    <ul class="chat"></ul>
+                  </div>
+                  <div class="panel-footer clearfix">
+                    <input id="message" class="form-control" type="text" disabled />
+                    <span
+                      class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-xs-12"
+                      style="margin-top: 10px"
+                    >
+                      <button class="btn btn-warning btn-lg btn-block" id="btn-chat">
+                        Send
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <video id="localVideo" autoplay class="col-md-12"></video>
+            </div>
+    
+
       </div>
     </div>
   </div>
+    
+
+
+
+
+
+  
 
   <script
     type="text/javascript"
@@ -44,6 +61,11 @@
 </body>
 
 <style>
+
+  #classroom-container {
+    height: 100vh;
+    justify-content: center;
+  }
   #chat-wrapper {
     width: 100vw;
   }
@@ -89,9 +111,6 @@
   }
 
   video {
-    width: 30%;
-    margin: 50px 50px;
-    padding: 0;
     box-shadow: rgba(156, 172, 172, 0.2) 0px 2px 2px,
       rgba(156, 172, 172, 0.2) 0px 4px 4px, rgba(156, 172, 172, 0.2) 0px 8px 8px,
       rgba(156, 172, 172, 0.2) 0px 16px 16px,
