@@ -141,14 +141,14 @@ app.use("/animations", express.static(__dirname + "/views"));
 
 // TEST
 app.get("/chat1", (req, res) => {
-  res.render("chat1", { title: "Firebase | SideTutor" });
+  res.render("chat1", { title: "Classroom | SideTutor" });
 });
 
 
 
 app.get("/chat3", (req, res) => {
   res.render("chat3", {
-    title: "Scaledrone 2 | SideTutor",
+    title: "Classroom | SideTutor",
     scaledrone: process.env.SCALEDRONE_ID,
     stun_url: process.env.STUN_URL,
     stun_user: process.env.STUN_USER,

@@ -4,22 +4,22 @@
 
 <body>
 
-  <div class="col-12 justify-content-center" id="classroom-container">
+  <div class="col-12 mt-2" id="classroom-container">
 
       <div class="row justify-content-center">
        
-          <video class="col-7" id="remoteVideo" autoplay></video>
+          <video class="col-7 mr-3" id="remoteVideo" autoplay>sdf</video>
 
    
           <div class="col-4" id="chat-wrapper">
               <div
-                class="col-md-12"
+                class="col-md-11"
                 id="chat-body"
               >
                 <div class="panel panel-primary">
                   <div class="panel-heading text-center">
                     <span class="glyphicon glyphicon-comment"></span>
-                    <strong>Classroom Chat</strong>
+                    <strong>Messages</strong>
                   </div>
                   <div class="panel-body body-panel">
                     <ul class="chat"></ul>
@@ -37,7 +37,7 @@
                   </div>
                 </div>
               </div>
-              <video id="localVideo" autoplay class="col-md-12"></video>
+              <video id="localVideo" autoplay class="col-md-11 mt-3"></video>
             </div>
     
 
@@ -62,17 +62,23 @@
 
 <style>
 
+html {
+  overflow-y: hidden;
+}
   #classroom-container {
     height: 100vh;
     justify-content: center;
   }
-  #chat-wrapper {
-    width: 100vw;
-  }
 
   #chat-body {
-    border: 1px solid black;
-    margin-right: 2rem;
+    border: 1px solid rgb(165, 165, 165);
+   
+
+    box-shadow: rgba(156, 172, 172, 0.2) 0px 2px 2px,
+      rgba(156, 172, 172, 0.2) 0px 4px 4px, rgba(156, 172, 172, 0.2) 0px 8px 8px,
+      rgba(156, 172, 172, 0.2) 0px 16px 16px,
+      rgba(156, 172, 172, 0.2) 0px 32px 32px,
+      rgba(156, 172, 172, 0.2) 0px 64px 64px;
   }
 
   .chat {
@@ -87,22 +93,9 @@
     border-bottom: 1px dotted #b3a9a9;
   }
 
-  .chat li.left .chat-body {
-    margin-left: 60px;
-  }
-
-  .chat li.right .chat-body {
-    margin-right: 60px;
-  }
-
   .chat li .chat-body p {
     margin: 0;
     color: #777777;
-  }
-
-  .panel .slidedown .glyphicon,
-  .chat .glyphicon {
-    margin-right: 5px;
   }
 
   .body-panel {
@@ -175,7 +168,7 @@
           else {
             chatClient
               .createChannel({
-                uniqueName: "adkjfbkdafgjdbrgjbgsdg",
+                uniqueName: "123eess2e",
                 friendlyName: "General Chat Channel"
               })
               .then(function(newChannel) {
@@ -203,7 +196,7 @@
       let template = $("#new-message").html();
       template = template.replace(
         "{{body}}",
-        "<b>Chat Setup Completed. Start your conversation!</b>"
+        "<b>Welcome to class!</b>"
       );
 
       $(".chat").append(template);
@@ -239,7 +232,7 @@
 
     // Generate random room name if needed
 
-    const roomHash = "usernametest";
+    const roomHash = "usernameddtest";
 
 // TODO: Replace with your own channel ID
 const drone = new ScaleDrone("<%= scaledrone %>");
