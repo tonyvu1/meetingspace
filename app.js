@@ -83,6 +83,7 @@ app.use(favicon(__dirname + "/public/images/favicon.ico"));
 // Passport Config
 require("./config/passport")(passport);
 
+
 // flash and session used for passing data to redirect pages
 const flash = require("connect-flash");
 const session = require("express-session");
@@ -132,12 +133,13 @@ app.use(function(req, res, next) {
 });
 
 // Routes
-app.use("/", require("./public/index"));
+app.use("/", require("./routes/index"));
 app.use("/images", express.static(__dirname + "/public/images"));
 app.use("/students", require("./routes/students"));
 app.use("/tutors", require("./routes/tutors"));
 app.use("/style", express.static(__dirname + "/public/style"));
 app.use("/js", express.static(__dirname + "/public/js"));
+app.use("/config", express.static(__dirname + "/config"));
 app.use("/animations", express.static(__dirname + "/views"));
 
 // TEST
@@ -158,7 +160,7 @@ app.get("/chat3", (req, res) => {
 });
 
 
-const Student = require('./models/Student')
+const Student = require('./models/User')
 app.get('/jwt', async (req, res) => {
   try {
     const students = await Student.find()

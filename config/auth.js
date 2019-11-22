@@ -1,17 +1,19 @@
 // This is used for PROTECTED ROUTES
 
 module.exports = {
-  ensureAuthenticatedStudent: function(req, res, next) {
+  ensureAuthenticated: function(req, res, next) {
     if (req.isAuthenticated()) {
       return next();
     }
-    req.flash("error_msg", "Please log in to view your student dashboard.");
-    res.redirect("/students/login");
+    req.flash("error_msg", "Please log in to view your dashboard.");
+    res.redirect("/login");
   },
-  forwardAuthenticatedStudent: function(req, res, next) {
+
+  forwardAuthenticated: function(req, res, next) {
     if (!req.isAuthenticated()) {
       return next();
     }
     res.redirect("/dashboard");
   }
+  
 };

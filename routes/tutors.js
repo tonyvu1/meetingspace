@@ -1,19 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const Meeting = require("../models/Meeting");
-const bcrypt = require("bcryptjs");
-const passport = require("passport");
 
-router.get("/dashboard", (req, res) => {
-  let meetings = Meeting.find({})
-    .sort({ start_date: "desc" })
-    .exec((err, meetings) => {
-      res.render("dashboard_tutor", {
-        meetings: meetings,
-        title: "Tutor Dashboard | SideTutor"
-      });
-    });
-});
+
+
+
+
 
 /**
  * Handle POST request to create new meeeting
@@ -34,5 +25,12 @@ router.post("/create", (req, res) => {
 
   res.redirect("/tutors/dashboard");
 });
+
+
+
+
+
+
+
 
 module.exports = router;
