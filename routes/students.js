@@ -6,7 +6,7 @@ const { ensureAuthenticated, forwardAuthenticated } = require("../config/auth");
 
 
 
-router.get("/chat", (req, res) => {
+router.get("/chat", ensureAuthenticated, (req, res) => {
   res.render("chat2", {
     title: "Scaledrone 1 | SideTutor",
     scaledrone: process.env.SCALEDRONE_ID,
