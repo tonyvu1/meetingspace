@@ -10,19 +10,56 @@ router.get("/", (req, res) => {
   res.render("home", { title: "Learn English Online | SideTutor" });
 });
 
+router.get("/admin", ensureAuthenticated, (req, res) => {
+  if (req.user.role === "Admin") {
+    let meetings = Meeting.find({})
+      .sort({ start_date: "desc" })
+      .exec((err, meetings) => {
+        res.render("dashboard_admin", {
+          meetings: meetings,
+          title: "Tutor Dashboard | SideTutor"
+        });
+      });
+  } else if (req.user.role === "Tutor") {
+    let meetings = Meeting.find({})
+      .sort({ start_date: "desc" })
+      .exec((err, meetings) => {
+        res.render("dashboard_tutor", {
+          meetings: meetings,
+          title: "Tutor Dashboard | SideTutor"
+        });
+      });
+  } else if (req.user.role === "Student") {
+    res.render("dashboard_student", {
+      title: "Student | SideTutor",
+      name: req.user.name // has to be "user" here. user is global language specific var
+    });
+  } else {
+    res.redirect("/");
+  }
+});
+
 // Use ensureAuthenticated (from /config/auth.js) to PROTECT this route
 router.get("/dashboard", ensureAuthenticated, (req, res) => {
-  if(req.user.role === "Tutor") {
+  if (req.user.role === "Admin") {
     let meetings = Meeting.find({})
-    .sort({ start_date: "desc" })
-    .exec((err, meetings) => {
-      res.render("dashboard_tutor", {
-        meetings: meetings,
-        title: "Tutor Dashboard | SideTutor"
+      .sort({ start_date: "desc" })
+      .exec((err, meetings) => {
+        res.render("dashboard_admin", {
+          meetings: meetings,
+          title: "Tutor Dashboard | SideTutor"
+        });
       });
-    });
-  }
-  else {
+  } else if (req.user.role === "Tutor") {
+    let meetings = Meeting.find({})
+      .sort({ start_date: "desc" })
+      .exec((err, meetings) => {
+        res.render("dashboard_tutor", {
+          meetings: meetings,
+          title: "Tutor Dashboard | SideTutor"
+        });
+      });
+  } else {
     res.render("dashboard_student", {
       title: "Student | SideTutor",
       name: req.user.name // has to be "user" here. user is global language specific var

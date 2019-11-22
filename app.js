@@ -137,6 +137,7 @@ app.use("/", require("./routes/index"));
 app.use("/images", express.static(__dirname + "/public/images"));
 app.use("/students", require("./routes/students"));
 app.use("/tutors", require("./routes/tutors"));
+app.use("/meetings", require("./routes/meetings"));
 app.use("/style", express.static(__dirname + "/public/style"));
 app.use("/js", express.static(__dirname + "/public/js"));
 app.use("/config", express.static(__dirname + "/config"));
