@@ -1,0 +1,68 @@
+<header>
+  <% include partials/nav.ejs %>
+</header>
+
+<body>
+  <h2>Create meetingcxv slot</h2>
+
+  <form method="POST" action="/tutors/create">
+    <div>
+      <label for="field-start_date">Start date and time</label>
+      <input
+        id="field-start_date"
+        type="date"
+        class="start_date_input"
+        autocomplete="off"
+        name="start_date"
+        maxlength="64"
+        autofocus
+        required
+      />
+    </div>
+
+    <div>
+      <label for="field-duration">Duration (minutes)</label>
+      <input
+        id="field-duration"
+        type="number"
+        autocomplete="off"
+        name="duration"
+        maxlength="2"
+        required
+        value="15"
+      />
+    </div>
+
+    <div class="buttons">
+      <input type="submit" value="Create" />
+    </div>
+  </form>
+
+  <% for (var m of meetings) { %>
+    <div class="row meeting-item">
+      <div class="meeting-item-time grow">
+        <p>ID: <%= m.id %></p>
+        <time><%= m.start_time %></time>
+        <p>Booked: <%= m.booked %></p>
+      </div>
+      <div>
+        <form method="POST">
+          <input type="hidden" name="meeting_id" value="<%= m.id %>">
+          <input type="submit" value="Book">
+        </form>
+      </div>
+    </div>
+  <% } %>
+  
+  <script src="/js/flatpickr.min.js"></script>
+  <script src="/js/scheduling_ui.js"></script>
+  <script src="/js/ui.js"></script>
+  <link rel="stylesheet" href="/js/flatpickr.min.css" />
+  <link rel="stylesheet" href="/js/ui.css" />
+</body>
+
+<script>
+  function dateMe() {
+    console.log(new Date(Date.now() % 30));
+  }
+</script>

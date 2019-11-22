@@ -43,7 +43,7 @@ var https_redirect = function(req, res, next) {
 };
 app.use(https_redirect);  */
 
-// DOTENV
+
 
 /***************************** TWILIO CHAT *******************************/
 const AccessToken = twilio.jwt.AccessToken;
@@ -70,7 +70,6 @@ app.get("/token", function(req, res) {
 
   res.send(tokenJwt);
 });
-
 
 
 
@@ -136,7 +135,9 @@ app.use(function(req, res, next) {
 app.use("/", require("./public/index"));
 app.use("/images", express.static(__dirname + "/public/images"));
 app.use("/students", require("./routes/students"));
+app.use("/tutors", require("./routes/tutors"));
 app.use("/style", express.static(__dirname + "/public/style"));
+app.use("/js", express.static(__dirname + "/public/js"));
 app.use("/animations", express.static(__dirname + "/views"));
 
 // TEST

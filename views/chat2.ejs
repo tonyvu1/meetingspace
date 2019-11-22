@@ -133,8 +133,9 @@
           return Twilio.Chat.Client.create(token, { logLevel: "debug" });
         })
         .then(client => {
+  
           getChannelDescriptor(client)
-            .then(channel => channel.getChannel())
+            .then(channel => client.getChannelByUniqueName("wombo"))
             .then(channel => channel.join())
             .then(channel => {
               chatSetupCompleted();
@@ -160,16 +161,27 @@
           .catch(error => console.log("Error fetching token", error) || error);
       }
   
-      function getChannelDescriptor(chatClient) {
+       function getChannelDescriptor(chatClient) {
         return chatClient
           .getPublicChannelDescriptors()
           .then(function(paginator) {
-            if (paginator.items.length > 0) return paginator.items[0];
+            var makeNewChannel = false;
+
+            for(i = 0; i < paginator.items.length; i++) {
+              if(paginator.items[i].friendlyName === "wombo") {
+                makeNewChannel = true
+              }
+            }
+            if (makeNewChannel) {
+              console.log("WE'RE COOOOLOOOOOOOOOOOOOOOOOOOOL!!!!!!!!!!!!!!!!!!!!!") ;
+            }
+    
             else {
               chatClient
                 .createChannel({
-                  uniqueName: "asdasdasdasd",
-                  friendlyName: "General Chat Channel"
+                  uniqueName: "wombo",
+                  friendlyName: "wombo",
+                  isPrivate: false
                 })
                 .then(function(newChannel) {
                   console.log("Created general channel:");
@@ -180,8 +192,15 @@
           })
           .then(channel => channel)
           .catch(error => console.log("error getting channel", error) || error);
-      }
+      } 
   
+      /*
+       .getChannelByUniqueName("chat3channel")
+          .then(channel => channel)
+          .catch(error => console.log("error getting channel", error) || error);
+  
+      */
+      
       function onMessageAdded(message) {
         let template = $("#new-message").html();
         template = template.replace(
@@ -228,11 +247,14 @@
           }
         });
       }
+  
+      
+  
     });
   
       // Generate random room name if needed
   
-      const roomHash = "usernadsmeddtest";
+      const roomHash = "usernameddtest";
   
   // TODO: Replace with your own channel ID
   const drone = new ScaleDrone("<%= scaledrone %>");

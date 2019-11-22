@@ -133,8 +133,13 @@ html {
         return Twilio.Chat.Client.create(token, { logLevel: "debug" });
       })
       .then(client => {
+
+        
+
+
+
         getChannelDescriptor(client)
-          .then(channel => channel.getChannel())
+          .then(channel => client.getChannelByUniqueName("chat34channel"))
           .then(channel => channel.join())
           .then(channel => {
             chatSetupCompleted();
@@ -160,7 +165,7 @@ html {
         .catch(error => console.log("Error fetching token", error) || error);
     }
 
-    function getChannelDescriptor(chatClient) {
+     function getChannelDescriptor(chatClient) {
       return chatClient
         .getPublicChannelDescriptors()
         .then(function(paginator) {
@@ -168,8 +173,9 @@ html {
           else {
             chatClient
               .createChannel({
-                uniqueName: "123eess2e",
-                friendlyName: "General Chat Channel"
+                uniqueName: "chat3channel",
+                friendlyName: "chat3channel",
+                isPrivate: false
               })
               .then(function(newChannel) {
                 console.log("Created general channel:");
@@ -180,8 +186,15 @@ html {
         })
         .then(channel => channel)
         .catch(error => console.log("error getting channel", error) || error);
-    }
+    } 
 
+    /*
+     .getChannelByUniqueName("chat3channel")
+        .then(channel => channel)
+        .catch(error => console.log("error getting channel", error) || error);
+
+    */
+    
     function onMessageAdded(message) {
       let template = $("#new-message").html();
       template = template.replace(
@@ -228,6 +241,9 @@ html {
         }
       });
     }
+
+    
+
   });
 
     // Generate random room name if needed

@@ -1,39 +1,38 @@
 <header>
   <% include partials/nav.ejs %>
 </header>
-
-<div
-  class="container-full d-flex align-items-center"
-  id="home-front"
->
-  <div class="container text-center my-auto left-slide">
-    <h1 class="mb-4">Online English Lessons</h1>
-    <h3 class="mb-5">
-      <em>Learning made easy</em>
-    </h3>
-    <a class="btn btn-primary" href="#home" style="color: white">Read More</a>
+<body>
+  <div class="container-full d-flex align-items-center" id="home-front">
+    <div class="container text-center my-auto left-slide">
+      <h1 class="mb-4">Online English Lessons</h1>
+      <h3 class="mb-5">
+        <em>Learning made easy</em>
+      </h3>
+      <a class="btn btn-primary" href="#home" style="color: white">Read More</a>
+    </div>
   </div>
-</div>
 
-<div class="container d-flex align-items-center left-appear" id="home">
-  <div class="container text-center my-auto">
-    <h1 class="mb-4">We are <strong>SideTutor</strong></h1>
-    <h3 class="mb-5">
-      <em>Our tutors are North American natives ready to teach!</em>
-    </h3>
-    <a class="btn btn-secondary" href="#about">Read More</a>
+  <div class="container d-flex align-items-center left-appear" id="home">
+    <div class="container text-center my-auto">
+      <h1 class="mb-4">We are <strong>SideTutor</strong></h1>
+      <h3 class="mb-5">
+        <em>Our tutors are North American natives ready to teach!</em>
+      </h3>
+      <a class="btn btn-secondary" href="#about">Read More</a>
+    </div>
   </div>
-</div>
 
-<div class="container-full d-flex align-items-center" id="home">
-  <div class="container text-center my-auto">
-    <h1 class="mb-4">Learn English Online</h1>
-    <h3 class="mb-5">
-      <em>Our tutors are North American natives ready to teach!</em>
-    </h3>
-    <a class="btn btn-secondary" href="#about">Find Out More</a>
+  <div class="container-full d-flex align-items-center" id="home">
+    <div class="container text-center my-auto">
+      <h1 class="mb-4">Learn English Online</h1>
+      <h3 class="mb-5">
+        <em>Our tutors are North American natives ready to teach!</em>
+      </h3>
+      <a class="btn btn-secondary" href="#about">Find Out More</a>
+    </div>
   </div>
-</div>
+  <script src="https://unpkg.com/scrollreveal"></script>
+</body>
 
 <style>
   #home-front {
@@ -47,5 +46,38 @@
   #home {
     height: 80vh;
   }
-
 </style>
+
+<script>
+  window.sr = ScrollReveal();
+  sr.reveal(".left-slide", {
+    duration: 2000,
+    origin: "left",
+    distance: "300px"
+  });
+  sr.reveal(".nav-appear", {
+    duration: 1000,
+    origin: "top",
+    distance: "100px"
+  });
+  sr.reveal(".left-appear", {
+    duration: 2000,
+    origin: "left",
+    distance: "300px",
+    viewFactor: 0.2
+  });
+  sr.reveal(".left-appear-slow", {
+    duration: 2000,
+    delay: 300,
+    origin: "left",
+    distance: "300px",
+    viewFactor: 0.2
+  });
+  sr.reveal(".left-appear-slowest", {
+    duration: 2000,
+    delay: 500,
+    origin: "left",
+    distance: "300px",
+    viewFactor: 0.2
+  });
+</script>
