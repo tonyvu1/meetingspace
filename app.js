@@ -169,7 +169,8 @@ var AccessToken = require('twilio').jwt.AccessToken;
 var VideoGrant = AccessToken.VideoGrant;
 
 app.get('/tokenVideo', function(request, response) {
-  var identity = request.user.name;
+ // var identity = request.user.name;
+ var identity = Math.random().toString(36).substring(7);
 
   // Create an access token which we will sign and return to the client,
   // containing the grant we just created.
@@ -196,7 +197,7 @@ app.get('/tokenVideo', function(request, response) {
 
 
 app.get("/twilio", function(req, res) {
-  res.render("twilio", {
+  res.render("classroom_tutor", {
     title: "Classroom | SideTutor",
     room: "Room1"
   });

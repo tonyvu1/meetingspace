@@ -4,13 +4,4 @@ const { ensureAuthenticated, forwardAuthenticated } = require("../config/auth");
 const Meeting = require("../models/Meeting");
 
 
-
-
-
-
-
-
 module.exports = router;
-
-
-
