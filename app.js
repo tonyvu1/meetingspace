@@ -1,4 +1,3 @@
-
 let twilio = require("twilio");
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
@@ -6,7 +5,7 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 var favicon = require("serve-favicon");
 const app = express();
-
+const video = require("twilio-video");
 /******************** FORCE HTTPS (UNCOMMENT WHEN DEPLOY) *********************/
 
 /* app.use((req, res, next) => {
@@ -43,11 +42,11 @@ var https_redirect = function(req, res, next) {
 };
 app.use(https_redirect);  */
 
-
-
 /***************************** TWILIO CHAT *******************************/
-const AccessToken = twilio.jwt.AccessToken;
+/* const AccessToken = twilio.jwt.AccessToken;
 const ChatGrant = AccessToken.ChatGrant;
+var VideoGrant = AccessToken.VideoGrant;
+const MAX_ALLOWED_SESSION_DURATION = 3600; // 1 hour
 
 app.get("/token", function(req, res) {
   let username = req.query.username;
@@ -58,18 +57,48 @@ app.get("/token", function(req, res) {
     process.env.API_SECRET,
     {
       identity: username,
-      ttl: 40000
+      ttl: MAX_ALLOWED_SESSION_DURATION
     }
   );
 
-  let grant = new ChatGrant({ serviceSid: process.env.SERVICE_SID });
+  let chatGrant = new ChatGrant({ serviceSid: process.env.SERVICE_SID });
+  var videoGrant = new VideoGrant();
 
-  token.addGrant(grant);
+  token.addGrant(chatGrant);
+  token.addGrant(videoGrant), () => {
+    console.log('VIDEO BUTTON ADDED')
+  };
   const tokenJwt = token.toJwt();
   console.log("token: " + tokenJwt);
 
   res.send(tokenJwt);
-});
+}); */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -82,7 +111,6 @@ app.use(favicon(__dirname + "/public/images/favicon.ico"));
 
 // Passport Config
 require("./config/passport")(passport);
-
 
 // flash and session used for passing data to redirect pages
 const flash = require("connect-flash");
@@ -108,7 +136,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
-    cookie:{_expires : 43200000},
+    cookie: { _expires: 43200000 },
     resave: true,
     saveUninitialized: true
   })
@@ -139,19 +167,25 @@ app.use("/students", require("./routes/students"));
 app.use("/tutors", require("./routes/tutors"));
 app.use("/meetings", require("./routes/meetings"));
 app.use("/style", express.static(__dirname + "/public/style"));
-app.use("/js", express.static(__dirname + "/public/js"));
+app.use("/scripts", express.static(__dirname + "/scripts"));
 app.use("/config", express.static(__dirname + "/config"));
 app.use("/animations", express.static(__dirname + "/views"));
 
 // TEST
+
+app.get("/twilio", function(req, res) {
+  res.render("twilio", {
+    title: "Classroom | SideTutor",
+    video: video
+  });
+});
+
 app.get("/chat1", (req, res) => {
   res.render("chat1", { title: "Classroom | SideTutor" });
 });
 
-
-
-app.get("/chat3", (req, res) => {
-  res.render("chat3", {
+app.get("/scaledrone", (req, res) => {
+  res.render("scaledrone", {
     title: "Classroom | SideTutor",
     scaledrone: process.env.SCALEDRONE_ID,
     stun_url: process.env.STUN_URL,
@@ -160,37 +194,55 @@ app.get("/chat3", (req, res) => {
   });
 });
 
-
-const Student = require('./models/User')
-app.get('/jwt', async (req, res) => {
+const Student = require("./models/User");
+app.get("/jwt", async (req, res) => {
   try {
-    const students = await Student.find()
-    res.json(students)
-} catch (err) {
-    res.status(500).json({ message: err.message })
-}
-})
+    const students = await Student.find();
+    res.json(students);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+/***************************** TWILIO VIDEO *******************************/
+const MAX_ALLOWED_SESSION_DURATION = 14400;
+
+var AccessToken = require('twilio').jwt.AccessToken;
+var VideoGrant = AccessToken.VideoGrant;
+
+app.get('/token', function(request, response) {
+  var identity = request.user.name;
+
+  // Create an access token which we will sign and return to the client,
+  // containing the grant we just created.
+  var token = new AccessToken(
+    process.env.ACCOUNT_SID,
+    process.env.API_SID,
+    process.env.API_SECRET,
+    { ttl: MAX_ALLOWED_SESSION_DURATION }
+  );
+
+  // Assign the generated identity to the token.
+  token.identity = identity;
+
+  // Grant the access token Twilio Video capabilities.
+  var grant = new VideoGrant();
+  token.addGrant(grant);
+
+  // Serialize the token to a JWT string and include it in a JSON response.
+  response.send({
+    identity: identity,
+    token: token.toJwt()
+  });
+});
+
+
+
+
 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 const express = require("express");
@@ -347,7 +399,3 @@ app.listen(PORT, console.log(`Server started on port ${PORT}`));
 
 
 */
-
-
-
-
