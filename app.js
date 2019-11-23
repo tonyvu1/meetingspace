@@ -1,11 +1,9 @@
-let twilio = require("twilio");
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const mongoose = require("mongoose");
 const passport = require("passport");
 var favicon = require("serve-favicon");
 const app = express();
-const video = require("twilio-video");
 /******************** FORCE HTTPS (UNCOMMENT WHEN DEPLOY) *********************/
 
 /* app.use((req, res, next) => {
@@ -73,31 +71,6 @@ app.get("/token", function(req, res) {
 
   res.send(tokenJwt);
 }); */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -173,12 +146,7 @@ app.use("/animations", express.static(__dirname + "/views"));
 
 // TEST
 
-app.get("/twilio", function(req, res) {
-  res.render("twilio", {
-    title: "Classroom | SideTutor",
-    room: "Room1"
-  });
-});
+
 
 app.get("/chat1", (req, res) => {
   res.render("chat1", { title: "Classroom | SideTutor" });
@@ -194,24 +162,14 @@ app.get("/scaledrone", (req, res) => {
   });
 });
 
-const Student = require("./models/User");
-app.get("/jwt", async (req, res) => {
-  try {
-    const students = await Student.find();
-    res.json(students);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
 /***************************** TWILIO VIDEO *******************************/
 const MAX_ALLOWED_SESSION_DURATION = 14400;
 
 var AccessToken = require('twilio').jwt.AccessToken;
 var VideoGrant = AccessToken.VideoGrant;
 
-app.get('/token', function(request, response) {
-  var identity = Math.random().toString(36).substring(7);
+app.get('/tokenVideo', function(request, response) {
+  var identity = request.user.name;
 
   // Create an access token which we will sign and return to the client,
   // containing the grant we just created.
@@ -237,7 +195,12 @@ app.get('/token', function(request, response) {
 });
 
 
-
+app.get("/twilio", function(req, res) {
+  res.render("twilio", {
+    title: "Classroom | SideTutor",
+    room: "Room1"
+  });
+});
 
 
 const PORT = process.env.PORT || 5000;
