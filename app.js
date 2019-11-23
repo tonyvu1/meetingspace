@@ -176,7 +176,7 @@ app.use("/animations", express.static(__dirname + "/views"));
 app.get("/twilio", function(req, res) {
   res.render("twilio", {
     title: "Classroom | SideTutor",
-    video: video
+    room: "Room1"
   });
 });
 
