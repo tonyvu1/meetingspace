@@ -3,256 +3,57 @@
 </header>
 
 <body>
-
-
-  <div class="row">
-    <h1>Welcome to Twilio Video quickstart</h1>
-    <div id="remote-media"></div>
-    <div id="controls">
-      <div id="preview">
-        <p class="instructions">Hello Beautiful</p>
-        <div id="local-media"></div>
-        <button id="button-preview">Preview My Camera</button>
-      </div>
-     
-      <div id="log"></div>
+  <h1>ugh</h1>
+  <div id="remote-media"></div>
+  <div id="controls">
+    <div id="preview">
+      <p class="instructions">Hello Beautiful</p>
+      <div id="local-media"></div>
+      <button id="button-preview">Preview My Camera</button>
     </div>
+    <div id="room-controls">
+      <p class="instructions">Room Name:</p>
+      <input id="room-name" type="text" placeholder="Enter a room name" />
+      <button id="button-join">Join Room</button>
+      <button id="button-leave">Leave Room</button>
+    </div>
+    <div id="log"></div>
   </div>
 
-  <div id="room-controls">
-    <p class="instructions">Room Name:</p>
-    <input id="room-name" type="text" placeholder="Enter a room name" />
-    <button id="button-join">Join Room</button>
-    <button id="button-leave">Leave Room</button>
-  </div>
+
   <script src="/style/jquery/dist/jquery.js"></script>
   <script src="//media.twiliocdn.com/sdk/js/video/v1/twilio-video.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+  <script type="text/javascript" src="/style/twilio_video.js"></script>
+
+
 
 
 </body>
 
-<script>
-  // TWILIO VIDEO
-
-  const Video = Twilio.Video;
-
-
-  var activeRoom;
-  var previewTracks;
-  var identity;
-  var roomName;
-
-  // Attach the Track to the DOM.
-  function attachTrack(track, container) {
-    container.appendChild(track.attach());
-  }
-
-  // Attach array of Tracks to the DOM.
-  function attachTracks(tracks, container) {
-    tracks.forEach(function(track) {
-      attachTrack(track, container);
-    });
-  }
-
-  // Detach given track from the DOM
-  function detachTrack(track) {
-    track.detach().forEach(function(element) {
-      element.remove();
-    });
-  }
-
-  // A new RemoteTrack was published to the Room.
-  function trackPublished(publication, container) {
-    if (publication.isSubscribed) {
-      attachTrack(publication.track, container);
-    }
-    publication.on("subscribed", function(track) {
-      log("Subscribed to " + publication.kind + " track");
-      attachTrack(track, container);
-    });
-    publication.on("unsubscribed", detachTrack);
-  }
-
-  // A RemoteTrack was unpublished from the Room.
-  function trackUnpublished(publication) {
-    log(publication.kind + " track was unpublished.");
-  }
-
-  // A new RemoteParticipant joined the Room
-  function participantConnected(participant, container) {
-    participant.tracks.forEach(function(publication) {
-      trackPublished(publication, container);
-    });
-    participant.on("trackPublished", function(publication) {
-      trackPublished(publication, container);
-    });
-    participant.on("trackUnpublished", trackUnpublished);
-  }
-
-  // Detach the Participant's Tracks from the DOM.
-  function detachParticipantTracks(participant) {
-    var tracks = getTracks(participant);
-    tracks.forEach(detachTrack);
-  }
-
-  // When we are about to transition away from this page, disconnect
-  // from the room, if joined.
-  window.addEventListener("beforeunload", leaveRoomIfJoined);
-
-  // Obtain a token from the server in order to connect to the Room.
-  $.getJSON("/token", function(data) {
-    identity = data.identity;
-    document.getElementById("room-controls").style.display = "block";
-
-    // Bind button to join Room.
-    document.getElementById("button-join").onclick = function() {
-      roomName = document.getElementById("room-name").value;
-      if (!roomName) {
-        alert("Please enter a room name.");
-        return;
-      }
-
-      console.log('just work..............')
-      log("Joining room '" + roomName + "'...");
-      var connectOptions = {
-        name: roomName,
-        logLevel: "debug"
-      };
-
-      if (previewTracks) {
-        connectOptions.tracks = previewTracks;
-      }
-
-      // Join the Room with the token from the server and the
-      // LocalParticipant's Tracks.
-      Video.connect(data.token, connectOptions).then(roomJoined, function(
-        error
-      ) {
-        log("Could not connect to Twilio: " + error.message);
-      });
-    };
-
-    // Bind button to leave Room.
-    document.getElementById("button-leave").onclick = function() {
-      log("Leaving room...");
-      activeRoom.disconnect();
-    };
-  });
-
-  // Get the Participant's Tracks.
-  function getTracks(participant) {
-    return Array.from(participant.tracks.values())
-      .filter(function(publication) {
-        return publication.track;
-      })
-      .map(function(publication) {
-        return publication.track;
-      });
-  }
-
-  // Successfully connected!
-  function roomJoined(room) {
-    window.room = activeRoom = room;
-
-    log("Joined as '" + identity + "'");
-    document.getElementById("button-join").style.display = "none";
-    document.getElementById("button-leave").style.display = "inline";
-
-    // Attach LocalParticipant's Tracks, if not already attached.
-    var previewContainer = document.getElementById("local-media");
-    if (!previewContainer.querySelector("video")) {
-      attachTracks(getTracks(room.localParticipant), previewContainer);
-    }
-
-    // Attach the Tracks of the Room's Participants.
-    var remoteMediaContainer = document.getElementById("remote-media");
-    room.participants.forEach(function(participant) {
-      log("Already in Room: '" + participant.identity + "'");
-      participantConnected(participant, remoteMediaContainer);
-    });
-
-    // When a Participant joins the Room, log the event.
-    room.on("participantConnected", function(participant) {
-      log("Joining: '" + participant.identity + "'");
-      participantConnected(participant, remoteMediaContainer);
-    });
-
-    // When a Participant leaves the Room, detach its Tracks.
-    room.on("participantDisconnected", function(participant) {
-      log("RemoteParticipant '" + participant.identity + "' left the room");
-      detachParticipantTracks(participant);
-    });
-
-    // Once the LocalParticipant leaves the room, detach the Tracks
-    // of all Participants, including that of the LocalParticipant.
-    room.on("disconnected", function() {
-      log("Left");
-      if (previewTracks) {
-        previewTracks.forEach(function(track) {
-          track.stop();
-        });
-        previewTracks = null;
-      }
-      detachParticipantTracks(room.localParticipant);
-      room.participants.forEach(detachParticipantTracks);
-      activeRoom = null;
-      document.getElementById("button-join").style.display = "inline";
-      document.getElementById("button-leave").style.display = "none";
-    });
-  }
-
-  // Preview LocalParticipant's Tracks.
-  document.getElementById("button-preview").onclick = function() {
-    var localTracksPromise = previewTracks
-      ? Promise.resolve(previewTracks)
-      : Video.createLocalTracks();
-
-    localTracksPromise.then(
-      function(tracks) {
-        window.previewTracks = previewTracks = tracks;
-        var previewContainer = document.getElementById("local-media");
-        if (!previewContainer.querySelector("video")) {
-          attachTracks(tracks, previewContainer);
-        }
-      },
-      function(error) {
-        console.error("Unable to access local media", error);
-        log("Unable to access Camera and Microphone");
-      }
-    );
-  };
-
-  // Activity log.
-  function log(message) {
-    var logDiv = document.getElementById("log");
-    logDiv.innerHTML += "<p>&gt;&nbsp;" + message + "</p>";
-    logDiv.scrollTop = logDiv.scrollHeight;
-  }
-
-  // Leave Room.
-  function leaveRoomIfJoined() {
-    if (activeRoom) {
-      activeRoom.disconnect();
-    }
-  }
-</script>
 
 <style>
-  div#remote-media {
-    height: 43%;
-    width: 100%;
-    background-color: #fff;
-    text-align: center;
-    margin: auto;
+  body,
+  p {
+    color: #ffffff;
+  }
+  body,
+  h1 {
+    color: #ffffff;
+  }
+  body,
+  a {
+    color: #ffffff;
   }
 
-  div#remote-media video {
-    border: 1px solid #272726;
-    margin: 3em 2em;
-    height: 70%;
-    max-width: 27% !important;
-    background-color: #272726;
-    background-repeat: no-repeat;
+  body,
+  a:hover {
+    color: red;
+  }
+
+  body {
+    background: #272726;
   }
 
   div#controls {
@@ -320,6 +121,12 @@
     border: none;
   }
 
+  #remote-media {
+    width: 100%;
+    height: 20rem;
+    background: pink;
+  }
+
   div#controls div#preview button#button-preview {
     background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+Cjxzdmcgd2lkdGg9IjE3cHgiIGhlaWdodD0iMTJweCIgdmlld0JveD0iMCAwIDE3IDEyIiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOnNrZXRjaD0iaHR0cDovL3d3dy5ib2hlbWlhbmNvZGluZy5jb20vc2tldGNoL25zIj4KICAgIDwhLS0gR2VuZXJhdG9yOiBTa2V0Y2ggMy4zLjEgKDEyMDAyKSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5GaWxsIDM0PC90aXRsZT4KICAgIDxkZXNjPkNyZWF0ZWQgd2l0aCBTa2V0Y2guPC9kZXNjPgogICAgPGRlZnM+PC9kZWZzPgogICAgPGcgaWQ9IlBhZ2UtMSIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc2tldGNoOnR5cGU9Ik1TUGFnZSI+CiAgICAgICAgPGcgaWQ9ImN1bW1hY2siIHNrZXRjaDp0eXBlPSJNU0xheWVyR3JvdXAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xMjUuMDAwMDAwLCAtMTkwOS4wMDAwMDApIiBmaWxsPSIjMEEwQjA5Ij4KICAgICAgICAgICAgPHBhdGggZD0iTTEzNi40NzEsMTkxOS44NyBMMTM2LjQ3MSwxOTE5LjYyIEwxMjUuNzY3LDE5MTkuNjIgTDEyNS43NjcsMTkxMC4wOCBMMTM2LjIyMSwxOTEwLjA4IEwxMzYuMjIxLDE5MTQuMTUgTDE0MC43ODUsMTkxMS4yNyBMMTQwLjc4NSwxOTE4LjQyIEwxMzYuMjIxLDE5MTUuNTUgTDEzNi4yMjEsMTkxOS44NyBMMTM2LjQ3MSwxOTE5Ljg3IEwxMzYuNDcxLDE5MTkuNjIgTDEzNi40NzEsMTkxOS44NyBMMTM2LjcyMSwxOTE5Ljg3IEwxMzYuNzIxLDE5MTYuNDUgTDE0MS4yODUsMTkxOS4zMyBMMTQxLjI4NSwxOTEwLjM3IEwxMzYuNzIxLDE5MTMuMjQgTDEzNi43MjEsMTkwOS41OCBMMTI1LjI2NywxOTA5LjU4IEwxMjUuMjY3LDE5MjAuMTIgTDEzNi43MjEsMTkyMC4xMiBMMTM2LjcyMSwxOTE5Ljg3IEwxMzYuNDcxLDE5MTkuODciIGlkPSJGaWxsLTM0IiBza2V0Y2g6dHlwZT0iTVNTaGFwZUdyb3VwIj48L3BhdGg+CiAgICAgICAgPC9nPgogICAgPC9nPgo8L3N2Zz4=)
       1em center no-repeat #fff;
@@ -363,7 +170,7 @@
   }
 
   div#controls div#log p {
-    color: #000000;
+    color: #686865;
     font-family: "Share Tech Mono", "Courier New", Courier, fixed-width;
     font-size: 1.25em;
     line-height: 1.25em;
@@ -371,54 +178,17 @@
     text-indent: -1.25em;
     width: 90%;
   }
-
-  #classroom-container {
-    height: 100vh;
-    justify-content: center;
-  }
-
-  #chat-body {
-    border: 1px solid rgb(165, 165, 165);
-
-    box-shadow: rgba(156, 172, 172, 0.2) 0px 2px 2px,
-      rgba(156, 172, 172, 0.2) 0px 4px 4px, rgba(156, 172, 172, 0.2) 0px 8px 8px,
-      rgba(156, 172, 172, 0.2) 0px 16px 16px,
-      rgba(156, 172, 172, 0.2) 0px 32px 32px,
-      rgba(156, 172, 172, 0.2) 0px 64px 64px;
-  }
-
-  .chat {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .chat li {
-    margin-bottom: 10px;
-    padding-bottom: 5px;
-    border-bottom: 1px dotted #b3a9a9;
-  }
-
-  .chat li .chat-body p {
-    margin: 0;
-    color: #777777;
-  }
-
-  .body-panel {
-    overflow-y: scroll;
-    height: 250px;
-  }
-
-  video {
-    box-shadow: rgba(156, 172, 172, 0.2) 0px 2px 2px,
-      rgba(156, 172, 172, 0.2) 0px 4px 4px, rgba(156, 172, 172, 0.2) 0px 8px 8px,
-      rgba(156, 172, 172, 0.2) 0px 16px 16px,
-      rgba(156, 172, 172, 0.2) 0px 32px 32px,
-      rgba(156, 172, 172, 0.2) 0px 64px 64px;
-  }
 </style>
 
 
 
 
 
+
+
+<script>
+
+
+
+
+</script>
