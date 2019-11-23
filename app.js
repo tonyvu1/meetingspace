@@ -211,7 +211,7 @@ var AccessToken = require('twilio').jwt.AccessToken;
 var VideoGrant = AccessToken.VideoGrant;
 
 app.get('/token', function(request, response) {
-  var identity = request.user.name;
+  var identity = request.query.name;
 
   // Create an access token which we will sign and return to the client,
   // containing the grant we just created.
