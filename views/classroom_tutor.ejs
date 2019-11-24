@@ -2,11 +2,10 @@
   <% include partials/nav.ejs %>
 </header>
 
-
-
 <style>
+  #chat-body {
+    border: 1px solid rgb(165, 165, 165);
 
-  #local-media {
     box-shadow: rgba(156, 172, 172, 0.2) 0px 2px 2px,
       rgba(156, 172, 172, 0.2) 0px 4px 4px, rgba(156, 172, 172, 0.2) 0px 8px 8px,
       rgba(156, 172, 172, 0.2) 0px 16px 16px,
@@ -14,45 +13,112 @@
       rgba(156, 172, 172, 0.2) 0px 64px 64px;
   }
 
-  #remote-media video {
-    max-width: 100%;
-    max-height: 100%;
-    border: none;
+  .chat {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .chat li {
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px dotted #b3a9a9;
+  }
+
+  .chat li .chat-body p {
+    margin: 0;
+    color: #777777;
+  }
+
+  .body-panel {
+    overflow-y: scroll;
+    height: 250px;
+  }
+
+  #remote-media {
+    position: relative;
+
+    box-shadow: rgba(156, 172, 172, 0.2) 0px 2px 2px,
+      rgba(156, 172, 172, 0.2) 0px 4px 4px, rgba(156, 172, 172, 0.2) 0px 8px 8px,
+      rgba(156, 172, 172, 0.2) 0px 16px 16px,
+      rgba(156, 172, 172, 0.2) 0px 32px 32px,
+      rgba(156, 172, 172, 0.2) 0px 64px 64px;
+
+    height: 90vh;
+    padding: 0;
+  }
+
+  div#remote-media video {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  #local-media {
+    box-shadow: rgba(156, 172, 172, 0.2) 0px 2px 2px,
+      rgba(156, 172, 172, 0.2) 0px 4px 4px, rgba(156, 172, 172, 0.2) 0px 8px 8px,
+      rgba(156, 172, 172, 0.2) 0px 16px 16px,
+      rgba(156, 172, 172, 0.2) 0px 32px 32px,
+      rgba(156, 172, 172, 0.2) 0px 64px 64px;
+
+    background-color: pink;
+
+    padding: 0;
+
+
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    border-radius: 15px;
+    overflow: hidden;
+
+    width: auto;
+    height: auto;
+    
+  }
+
+  div#local-media video {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    
   }
 </style>
 
+<body onLoad="document.getElementById('button-preview').click();">
+  <div class="col-12 mt-2" id="classroom-container">
+    <div class="row justify-content-center">
+      <div class="col-lg-7 col-sm-12 mr-3" id="remote-media">
+        <div id="local-media" class="col-lg-3 mr-3 mb-3"></div>
+      </div>
 
-<body>
-
-
-
-    <div class="col-12 mt-2" id="classroom-container">
-        <div class="row justify-content-center">
-            <div class="col-7 mr-3" id="local-media"></div>
-
-
-
-
+      <div class="col-lg-4 col-sm-12 mt-2" id="chat-wrapper">
+        <div class="col-md-11" id="chat-body">
+          <div class="panel panel-primary">
+            <div class="panel-heading text-center">
+              <span class="glyphicon glyphicon-comment"></span>
+              <strong>Messages</strong>
+            </div>
+            <div class="panel-body body-panel">
+              <ul class="chat"></ul>
+            </div>
+            <div class="panel-footer clearfix">
+              <input id="message" class="form-control" type="text" disabled />
+              <span
+                class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-xs-12"
+                style="margin-top: 10px"
+              >
+                <button class="btn btn-warning btn-lg btn-block" id="btn-chat">
+                  Send
+                </button>
+              </span>
+            </div>
           </div>
+        </div>
+      </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1>ugh</h1>
+  </div>
 
   <div id="controls">
     <div id="preview">
@@ -69,12 +135,10 @@
     <div id="log"></div>
   </div>
 
-
   <script src="/style/jquery/dist/jquery.js"></script>
   <script src="/style/scripts/twilio_video.js"></script>
-
+  <script src="https://media.twiliocdn.com/sdk/js/chat/v1.1/twilio-chat.min.js"></script>
 </body>
-
 
 <style>
   body,
@@ -92,16 +156,16 @@
 
   body,
   a:hover {
-    color: red;
+    color: rgb(0, 0, 0);
   }
 
   body {
     background: #ffffff;
   }
 
-button {
-  background: lightblue;
-}
+  button {
+    background: lightblue;
+  }
   div#controls {
     padding: 3em;
     max-width: 1200px;
@@ -116,7 +180,7 @@ button {
   div#controls div#preview {
     width: 16em;
     margin: 0 1.5em;
-    text-align: center;
+    text-align: left;
   }
 
   div#controls p.instructions {
@@ -137,7 +201,7 @@ button {
     font-size: 0.8em;
     font-weight: lighter;
     outline: 0;
-    background: blue
+    background: blue;
   }
 
   div#controls div#room-controls input {
@@ -150,24 +214,6 @@ button {
     position: relative;
     top: 1px;
   }
-
-/*   div#controls div#preview div#local-media {
-    width: 500px;
-    height: 500px;
-    border: 1px solid #000000;
-    box-sizing: border-box;
-    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+Cjxzdmcgd2lkdGg9IjgwcHgiIGhlaWdodD0iODBweCIgdmlld0JveD0iMCAwIDgwIDgwIiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOnNrZXRjaD0iaHR0cDovL3d3dy5ib2hlbWlhbmNvZGluZy5jb20vc2tldGNoL25zIj4KICAgIDwhLS0gR2VuZXJhdG9yOiBTa2V0Y2ggMy4zLjEgKDEyMDAyKSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5GaWxsIDUxICsgRmlsbCA1MjwvdGl0bGU+CiAgICA8ZGVzYz5DcmVhdGVkIHdpdGggU2tldGNoLjwvZGVzYz4KICAgIDxkZWZzPjwvZGVmcz4KICAgIDxnIGlkPSJQYWdlLTEiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIHNrZXRjaDp0eXBlPSJNU1BhZ2UiPgogICAgICAgIDxnIGlkPSJjdW1tYWNrIiBza2V0Y2g6dHlwZT0iTVNMYXllckdyb3VwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMTU5LjAwMDAwMCwgLTE3NDYuMDAwMDAwKSIgZmlsbD0iI0ZGRkZGRiI+CiAgICAgICAgICAgIDxnIGlkPSJGaWxsLTUxLSstRmlsbC01MiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTU5LjAwMDAwMCwgMTc0Ni4wMDAwMDApIiBza2V0Y2g6dHlwZT0iTVNTaGFwZUdyb3VwIj4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik0zOS42ODYsMC43MyBDMTcuODUsMC43MyAwLjA4NSwxOC41IDAuMDg1LDQwLjMzIEMwLjA4NSw2Mi4xNyAxNy44NSw3OS45MyAzOS42ODYsNzkuOTMgQzYxLjUyMiw3OS45MyA3OS4yODcsNjIuMTcgNzkuMjg3LDQwLjMzIEM3OS4yODcsMTguNSA2MS41MjIsMC43MyAzOS42ODYsMC43MyBMMzkuNjg2LDAuNzMgWiBNMzkuNjg2LDEuNzMgQzYxLjAwNSwxLjczIDc4LjI4NywxOS4wMiA3OC4yODcsNDAuMzMgQzc4LjI4Nyw2MS42NSA2MS4wMDUsNzguOTMgMzkuNjg2LDc4LjkzIEMxOC4zNjcsNzguOTMgMS4wODUsNjEuNjUgMS4wODUsNDAuMzMgQzEuMDg1LDE5LjAyIDE4LjM2NywxLjczIDM5LjY4NiwxLjczIEwzOS42ODYsMS43MyBaIiBpZD0iRmlsbC01MSI+PC9wYXRoPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTQ3Ljk2LDUzLjMzNSBMNDcuOTYsNTIuODM1IEwyMC4wOTMsNTIuODM1IEwyMC4wOTMsMjcuODI1IEw0Ny40NiwyNy44MjUgTDQ3LjQ2LDM4LjI1NSBMNTkuMjc5LDMwLjgwNSBMNTkuMjc5LDQ5Ljg1NSBMNDcuNDYsNDIuNDA1IEw0Ny40Niw1My4zMzUgTDQ3Ljk2LDUzLjMzNSBMNDcuOTYsNTIuODM1IEw0Ny45Niw1My4zMzUgTDQ4LjQ2LDUzLjMzNSBMNDguNDYsNDQuMjE1IEw2MC4yNzksNTEuNjY1IEw2MC4yNzksMjguOTk1IEw0OC40NiwzNi40NDUgTDQ4LjQ2LDI2LjgyNSBMMTkuMDkzLDI2LjgyNSBMMTkuMDkzLDUzLjgzNSBMNDguNDYsNTMuODM1IEw0OC40Niw1My4zMzUgTDQ3Ljk2LDUzLjMzNSIgaWQ9IkZpbGwtNTIiPjwvcGF0aD4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+);
-    background-position: center;
-    background-repeat: no-repeat;
-    margin: 0 auto;
-  }
-
-  div#controls div#preview div#local-media video {
-    max-width: 100%;
-    max-height: 100%;
-    border: none;
-  } */
-
 
   div#controls div#preview button#button-preview {
     background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+Cjxzdmcgd2lkdGg9IjE3cHgiIGhlaWdodD0iMTJweCIgdmlld0JveD0iMCAwIDE3IDEyIiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOnNrZXRjaD0iaHR0cDovL3d3dy5ib2hlbWlhbmNvZGluZy5jb20vc2tldGNoL25zIj4KICAgIDwhLS0gR2VuZXJhdG9yOiBTa2V0Y2ggMy4zLjEgKDEyMDAyKSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5GaWxsIDM0PC90aXRsZT4KICAgIDxkZXNjPkNyZWF0ZWQgd2l0aCBTa2V0Y2guPC9kZXNjPgogICAgPGRlZnM+PC9kZWZzPgogICAgPGcgaWQ9IlBhZ2UtMSIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc2tldGNoOnR5cGU9Ik1TUGFnZSI+CiAgICAgICAgPGcgaWQ9ImN1bW1hY2siIHNrZXRjaDp0eXBlPSJNU0xheWVyR3JvdXAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xMjUuMDAwMDAwLCAtMTkwOS4wMDAwMDApIiBmaWxsPSIjMEEwQjA5Ij4KICAgICAgICAgICAgPHBhdGggZD0iTTEzNi40NzEsMTkxOS44NyBMMTM2LjQ3MSwxOTE5LjYyIEwxMjUuNzY3LDE5MTkuNjIgTDEyNS43NjcsMTkxMC4wOCBMMTM2LjIyMSwxOTEwLjA4IEwxMzYuMjIxLDE5MTQuMTUgTDE0MC43ODUsMTkxMS4yNyBMMTQwLjc4NSwxOTE4LjQyIEwxMzYuMjIxLDE5MTUuNTUgTDEzNi4yMjEsMTkxOS44NyBMMTM2LjQ3MSwxOTE5Ljg3IEwxMzYuNDcxLDE5MTkuNjIgTDEzNi40NzEsMTkxOS44NyBMMTM2LjcyMSwxOTE5Ljg3IEwxMzYuNzIxLDE5MTYuNDUgTDE0MS4yODUsMTkxOS4zMyBMMTQxLjI4NSwxOTEwLjM3IEwxMzYuNzIxLDE5MTMuMjQgTDEzNi43MjEsMTkwOS41OCBMMTI1LjI2NywxOTA5LjU4IEwxMjUuMjY3LDE5MjAuMTIgTDEzNi43MjEsMTkyMC4xMiBMMTM2LjcyMSwxOTE5Ljg3IEwxMzYuNDcxLDE5MTkuODciIGlkPSJGaWxsLTM0IiBza2V0Y2g6dHlwZT0iTVNTaGFwZUdyb3VwIj48L3BhdGg+CiAgICAgICAgPC9nPgogICAgPC9nPgo8L3N2Zz4=)
@@ -222,15 +268,126 @@ button {
   }
 </style>
 
-
-
-
-
-
+<script id="new-message" type="text/template">
+  <li id="{{id}}" class="right clearfix">
+      <div class="chat-body clearfix">
+          <p>
+              {{body}}
+          </p>
+      </div>
+  </li>
+</script>
 
 <script>
+  $(document).ready(function() {
+    let username = "tony";
+    let chatChannel;
 
+    getToken()
+      .then(token => {
+        console.log("returned token is ", token);
+        return Twilio.Chat.Client.create(token, { logLevel: "debug" });
+      })
+      .then(client => {
+        getChannelDescriptor(client)
+          .then(channel => client.getChannelByUniqueName("chat34channel"))
+          .then(channel => channel.join())
+          .then(channel => {
+            chatSetupCompleted();
+            chatChannel = channel;
+            channel.on("messageAdded", onMessageAdded);
+            activateChatBox();
+          });
+      })
+      .catch(
+        error =>
+          console.log("error setting up twilio", error) || chatSetupFailed()
+      );
 
+    function getToken() {
+      return fetch(`/tokenChat?username=${username}`)
+        .then(response => {
+          if (response.ok) {
+            return response.text();
+          }
 
+          throw new Error("Network response was not ok.");
+        })
+        .catch(error => console.log("Error fetching token", error) || error);
+    }
 
+    function getChannelDescriptor(chatClient) {
+      return chatClient
+        .getPublicChannelDescriptors()
+        .then(function(paginator) {
+          if (paginator.items.length > 0) return paginator.items[0];
+          else {
+            chatClient
+              .createChannel({
+                uniqueName: "chat3channel",
+                friendlyName: "chat3channel",
+                isPrivate: false
+              })
+              .then(function(newChannel) {
+                console.log("Created general channel:");
+                console.log(newChannel);
+                return newChannel;
+              });
+          }
+        })
+        .then(channel => channel)
+        .catch(error => console.log("error getting channel", error) || error);
+    }
+
+    /*
+     .getChannelByUniqueName("chat3channel")
+        .then(channel => channel)
+        .catch(error => console.log("error getting channel", error) || error);
+
+    */
+
+    function onMessageAdded(message) {
+      let template = $("#new-message").html();
+      template = template.replace(
+        "{{body}}",
+        `<b>${message.author}:</b> ${message.body}`
+      );
+
+      $(".chat").append(template);
+    }
+
+    function chatSetupCompleted() {
+      let template = $("#new-message").html();
+      template = template.replace("{{body}}", "<b>Welcome to class!</b>");
+
+      $(".chat").append(template);
+    }
+
+    function chatSetupFailed() {
+      let template = $("#new-message").html();
+      template = template.replace(
+        "{{body}}",
+        "<b>Chat Setup Failed. Contact Admin.</b>"
+      );
+
+      $(".chat").append(template);
+    }
+
+    function activateChatBox() {
+      $("#message").removeAttr("disabled");
+      $("#btn-chat").click(function() {
+        const message = $("#message").val();
+        $("#message").val("");
+
+        //send message
+        chatChannel.sendMessage(message);
+      });
+
+      $("#message").on("keydown", function(e) {
+        if (e.keyCode === 13) {
+          $("#btn-chat").click();
+        }
+      });
+    }
+  });
 </script>

@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 var favicon = require("serve-favicon");
 const app = express();
+const twilio = require('twilio')
 /******************** FORCE HTTPS (UNCOMMENT WHEN DEPLOY) *********************/
 
 /* app.use((req, res, next) => {
@@ -41,12 +42,12 @@ var https_redirect = function(req, res, next) {
 app.use(https_redirect);  */
 
 /***************************** TWILIO CHAT *******************************/
-/* const AccessToken = twilio.jwt.AccessToken;
+const AccessToken = twilio.jwt.AccessToken;
 const ChatGrant = AccessToken.ChatGrant;
 var VideoGrant = AccessToken.VideoGrant;
-const MAX_ALLOWED_SESSION_DURATION = 3600; // 1 hour
+const MAX_ALLOWED_SESSION_DURATION_CHAT = 3600; // 1 hour
 
-app.get("/token", function(req, res) {
+app.get("/tokenChat", function(req, res) {
   let username = req.query.username;
   console.log("username is: ", username);
   let token = new AccessToken(
@@ -55,7 +56,7 @@ app.get("/token", function(req, res) {
     process.env.API_SECRET,
     {
       identity: username,
-      ttl: MAX_ALLOWED_SESSION_DURATION
+      ttl: MAX_ALLOWED_SESSION_DURATION_CHAT
     }
   );
 
@@ -63,16 +64,10 @@ app.get("/token", function(req, res) {
   var videoGrant = new VideoGrant();
 
   token.addGrant(chatGrant);
-  token.addGrant(videoGrant), () => {
-    console.log('VIDEO BUTTON ADDED')
-  };
+  token.addGrant(videoGrant);
   const tokenJwt = token.toJwt();
-  console.log("token: " + tokenJwt);
-
   res.send(tokenJwt);
-}); */
-
-
+}); 
 
 
 /***************************** HANDLE PRODUCTION *******************************/
@@ -152,20 +147,11 @@ app.get("/chat1", (req, res) => {
   res.render("chat1", { title: "Classroom | SideTutor" });
 });
 
-app.get("/scaledrone", (req, res) => {
-  res.render("scaledrone", {
-    title: "Classroom | SideTutor",
-    scaledrone: process.env.SCALEDRONE_ID,
-    stun_url: process.env.STUN_URL,
-    stun_user: process.env.STUN_USER,
-    stun_cred: process.env.STUN_CRED
-  });
-});
 
 /***************************** TWILIO VIDEO *******************************/
 const MAX_ALLOWED_SESSION_DURATION = 14400;
 
-var AccessToken = require('twilio').jwt.AccessToken;
+
 var VideoGrant = AccessToken.VideoGrant;
 
 app.get('/tokenVideo', function(request, response) {
