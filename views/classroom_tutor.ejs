@@ -32,20 +32,47 @@
 
   .body-panel {
     overflow-y: scroll;
-    height: 250px;
+    height: 230px;
+  }
+
+  #local-media {
+    position: absolute;
+    bottom: 1vw;
+    right: 1vw;
+
+    width: 24vw;
+    height: 18vw;
+    border-radius: 1vw;
+  }
+
+  div#local-media video {
+    max-width: 100%;
+    max-height: 100%;
+    border: none;
+    border-radius: 1vw;
+  }
+
+  @media screen and (min-width: 992px) {
+    #local-media {
+      width: 15vw;
+      height: 11.26vw;
+    }
   }
 
   #remote-media {
     position: relative;
 
-    box-shadow: rgba(156, 172, 172, 0.2) 0px 2px 2px,
-      rgba(156, 172, 172, 0.2) 0px 4px 4px, rgba(156, 172, 172, 0.2) 0px 8px 8px,
-      rgba(156, 172, 172, 0.2) 0px 16px 16px,
-      rgba(156, 172, 172, 0.2) 0px 32px 32px,
-      rgba(156, 172, 172, 0.2) 0px 64px 64px;
-
-    height: 90vh;
     padding: 0;
+    min-height: 30vh;
+    background: transparent;
+
+    -webkit-box-shadow: 2px 0px 15px -5px rgba(0, 0, 0, 0.26);
+    box-shadow: 2px 0px 15px -5px rgba(0, 0, 0, 0.26);
+  }
+
+  div#remote-media {
+    background-image: url("/images/xlsoon.png");
+    background-repeat: no-repeat;
   }
 
   div#remote-media video {
@@ -54,57 +81,30 @@
     overflow: hidden;
   }
 
-  #local-media {
-    box-shadow: rgba(156, 172, 172, 0.2) 0px 2px 2px,
-      rgba(156, 172, 172, 0.2) 0px 4px 4px, rgba(156, 172, 172, 0.2) 0px 8px 8px,
-      rgba(156, 172, 172, 0.2) 0px 16px 16px,
-      rgba(156, 172, 172, 0.2) 0px 32px 32px,
-      rgba(156, 172, 172, 0.2) 0px 64px 64px;
-
-    background-color: pink;
-
-    padding: 0;
-
-
-    position: absolute;
-    bottom: 0;
-    right: 0;
-
-    border-radius: 15px;
-    overflow: hidden;
-
-    width: auto;
-    height: auto;
-    
-  }
-
-  div#local-media video {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    
+  #button-preview {
+    opacity: 0;
   }
 </style>
 
 <body onLoad="document.getElementById('button-preview').click();">
-  <div class="col-12 mt-2" id="classroom-container">
+  <div class="col-12 mt-3" id="classroom-container">
     <div class="row justify-content-center">
-      <div class="col-lg-7 col-sm-12 mr-3" id="remote-media">
-        <div id="local-media" class="col-lg-3 mr-3 mb-3"></div>
+      <div class="col-lg-7 col-xm-12 mr-3" id="remote-media">
+        <div id="local-media"></div>
       </div>
 
-      <div class="col-lg-4 col-sm-12 mt-2" id="chat-wrapper">
-        <div class="col-md-11" id="chat-body">
+      <div class="col-lg-4 col-sm-12" id="chat-wrapper">
+        <div class="col-md-12" id="chat-body">
           <div class="panel panel-primary">
             <div class="panel-heading text-center">
               <span class="glyphicon glyphicon-comment"></span>
-              <strong>Messages</strong>
+              <strong>&#160;</strong>
             </div>
             <div class="panel-body body-panel">
               <ul class="chat"></ul>
             </div>
             <div class="panel-footer clearfix">
-              <input id="message" class="form-control" type="text" disabled />
+              <input id="message" class="form-control" type="text" />
               <span
                 class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-xs-12"
                 style="margin-top: 10px"
@@ -116,24 +116,35 @@
             </div>
           </div>
         </div>
+
+        <p class="text-right">
+          <a class="btn btn-primary mt-2 pull-right" data-toggle="collapse" href="#viewLog" role="button" aria-expanded="false">
+            Connection Info
+          </a>
+        </p>
+        <div class="collapse" id="viewLog">
+          <div class="col-md-12 mt-2" id="log"></div>
+        </div>
+
+
       </div>
     </div>
   </div>
 
   <div id="controls">
-    <div id="preview">
-      <p class="instructions">Hello Beautiful</p>
-      <div id="remote-media"></div>
-      <button id="button-preview">Preview My Camera</button>
-    </div>
     <div id="room-controls">
       <p class="instructions">Room Name:</p>
+
       <input id="room-name" type="text" value="<%= room %>" readonly />
       <button id="button-join">Begin Class</button>
       <button id="button-leave">Leave Class</button>
     </div>
-    <div id="log"></div>
+
+    
   </div>
+
+  <%# DONT DELETE %>
+  <button id="button-preview">Preview My Camera</button>
 
   <script src="/style/jquery/dist/jquery.js"></script>
   <script src="/style/scripts/twilio_video.js"></script>
@@ -141,127 +152,19 @@
 </body>
 
 <style>
-  body,
-  p {
-    color: #000000;
-  }
-  body,
-  h1 {
-    color: #000000;
-  }
-  body,
-  a {
-    color: #000000;
-  }
-
-  body,
-  a:hover {
-    color: rgb(0, 0, 0);
-  }
-
-  body {
-    background: #ffffff;
-  }
-
-  button {
-    background: lightblue;
-  }
-  div#controls {
-    padding: 3em;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  div#controls div {
-    float: left;
-  }
-
-  div#controls div#room-controls,
-  div#controls div#preview {
-    width: 16em;
-    margin: 0 1.5em;
-    text-align: left;
-  }
-
-  div#controls p.instructions {
-    text-align: left;
-    margin-bottom: 1em;
-    font-family: Helvetica-LightOblique, Helvetica, sans-serif;
-    font-style: oblique;
-    font-size: 1.25em;
-    color: #777776;
-  }
-
-  div#controls button {
-    width: 15em;
-    height: 2.5em;
-    margin-top: 1.75em;
-    border-radius: 1em;
-    font-family: "Helvetica Light", Helvetica, sans-serif;
-    font-size: 0.8em;
-    font-weight: lighter;
-    outline: 0;
-    background: blue;
-  }
-
-  div#controls div#room-controls input {
-    font-family: Helvetica-LightOblique, Helvetica, sans-serif;
-    font-style: oblique;
-    font-size: 1em;
-  }
-
-  div#controls button:active {
-    position: relative;
-    top: 1px;
-  }
-
-  div#controls div#preview button#button-preview {
-    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+Cjxzdmcgd2lkdGg9IjE3cHgiIGhlaWdodD0iMTJweCIgdmlld0JveD0iMCAwIDE3IDEyIiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOnNrZXRjaD0iaHR0cDovL3d3dy5ib2hlbWlhbmNvZGluZy5jb20vc2tldGNoL25zIj4KICAgIDwhLS0gR2VuZXJhdG9yOiBTa2V0Y2ggMy4zLjEgKDEyMDAyKSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5GaWxsIDM0PC90aXRsZT4KICAgIDxkZXNjPkNyZWF0ZWQgd2l0aCBTa2V0Y2guPC9kZXNjPgogICAgPGRlZnM+PC9kZWZzPgogICAgPGcgaWQ9IlBhZ2UtMSIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc2tldGNoOnR5cGU9Ik1TUGFnZSI+CiAgICAgICAgPGcgaWQ9ImN1bW1hY2siIHNrZXRjaDp0eXBlPSJNU0xheWVyR3JvdXAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xMjUuMDAwMDAwLCAtMTkwOS4wMDAwMDApIiBmaWxsPSIjMEEwQjA5Ij4KICAgICAgICAgICAgPHBhdGggZD0iTTEzNi40NzEsMTkxOS44NyBMMTM2LjQ3MSwxOTE5LjYyIEwxMjUuNzY3LDE5MTkuNjIgTDEyNS43NjcsMTkxMC4wOCBMMTM2LjIyMSwxOTEwLjA4IEwxMzYuMjIxLDE5MTQuMTUgTDE0MC43ODUsMTkxMS4yNyBMMTQwLjc4NSwxOTE4LjQyIEwxMzYuMjIxLDE5MTUuNTUgTDEzNi4yMjEsMTkxOS44NyBMMTM2LjQ3MSwxOTE5Ljg3IEwxMzYuNDcxLDE5MTkuNjIgTDEzNi40NzEsMTkxOS44NyBMMTM2LjcyMSwxOTE5Ljg3IEwxMzYuNzIxLDE5MTYuNDUgTDE0MS4yODUsMTkxOS4zMyBMMTQxLjI4NSwxOTEwLjM3IEwxMzYuNzIxLDE5MTMuMjQgTDEzNi43MjEsMTkwOS41OCBMMTI1LjI2NywxOTA5LjU4IEwxMjUuMjY3LDE5MjAuMTIgTDEzNi43MjEsMTkyMC4xMiBMMTM2LjcyMSwxOTE5Ljg3IEwxMzYuNDcxLDE5MTkuODciIGlkPSJGaWxsLTM0IiBza2V0Y2g6dHlwZT0iTVNTaGFwZUdyb3VwIj48L3BhdGg+CiAgICAgICAgPC9nPgogICAgPC9nPgo8L3N2Zz4=)
-      1em center no-repeat #fff;
-    border: none;
-    padding-left: 1.5em;
-  }
-
-  div#controls div#log {
+  #log {
     border: 1px solid #686865;
-  }
-
-  div#controls div#room-controls {
-    display: none;
-  }
-
-  div#controls div#room-controls input {
-    width: 100%;
-    height: 2.5em;
-    padding: 0.5em;
-    display: block;
-  }
-
-  div#controls div#room-controls button {
-    color: rgb(0, 0, 0);
-    background: 0 0;
-    border: 1px solid #686865;
-  }
-
-  div#controls div#room-controls button#button-leave {
-    display: none;
-  }
-
-  div#controls div#log {
-    width: 35%;
-    height: 9.5em;
-    margin-top: 2.75em;
+    height: 15em;
     text-align: left;
     padding: 1.5em;
     float: right;
     overflow-y: scroll;
   }
 
-  div#controls div#log p {
+  #log p {
     color: #000000;
     font-family: "Share Tech Mono", "Courier New", Courier, fixed-width;
-    font-size: 1.25em;
-    line-height: 1.25em;
+    font-size: 1em;
     margin-left: 1em;
     text-indent: -1.25em;
     width: 90%;
