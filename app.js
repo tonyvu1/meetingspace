@@ -7,7 +7,7 @@ const app = express();
 const twilio = require('twilio')
 /******************** FORCE HTTPS (UNCOMMENT WHEN DEPLOY) *********************/
 
-/* app.use((req, res, next) => {
+app.use((req, res, next) => {
   if (req.header("x-forwarded-proto") !== "https") {
     res.redirect(`https://${req.header("host")}${req.url}`);
   } else {
@@ -39,7 +39,7 @@ var https_redirect = function(req, res, next) {
     return next();
   }
 };
-app.use(https_redirect);  */
+app.use(https_redirect);  
 
 /***************************** TWILIO CHAT *******************************/
 const AccessToken = twilio.jwt.AccessToken;
