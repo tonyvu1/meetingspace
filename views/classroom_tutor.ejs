@@ -1,5 +1,5 @@
 <header>
-  <% include partials/nav.ejs %>
+  <% include partials/nav2.ejs %>
 </header>
 
 <style>
@@ -86,7 +86,7 @@
   }
 </style>
 
-<body onLoad="document.getElementById('button-preview').click();">
+<div onLoad="document.getElementById('button-preview').click();">
   <div class="col-12 mt-3" id="classroom-container">
     <div class="row justify-content-center">
       <div class="col-lg-7 col-xm-12 mr-3" id="remote-media">
@@ -146,10 +146,10 @@
   <%# DONT DELETE %>
   <button id="button-preview">Preview My Camera</button>
 
-  <script src="/style/jquery/dist/jquery.js"></script>
+  <script src="/style/jquery/jquery.min.js"></script>
   <script src="/style/scripts/twilio_video.js"></script>
   <script src="https://media.twiliocdn.com/sdk/js/chat/v1.1/twilio-chat.min.js"></script>
-</body>
+</div>
 
 <style>
   #log {
