@@ -1,0 +1,123 @@
+<style>
+  #tutorNav {
+    background-color: #f8f9fa;
+  }
+  #tutorNav .navbar-toggler {
+    font-size: 12px;
+    right: 0;
+    padding: 13px;
+    text-transform: uppercase;
+    color: rgb(0, 0, 0);
+    border: 0;
+    background-color: #fed136;
+    font-family: Montserrat, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+      "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  }
+  #tutorNav .navbar-brand {
+    color: #212529;
+    font-family: Montserrat, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+      "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  }
+  #tutorNav .navbar-brand.active,
+  #tutorNav .navbar-brand:active,
+  #tutorNav .navbar-brand:focus,
+  #tutorNav .navbar-brand:hover {
+    color: #000000;
+  }
+  #tutorNav .navbar-nav .nav-item .nav-link {
+    font-size: 100%;
+    font-weight: 400;
+    padding: 0.75em 0;
+    letter-spacing: 1px;
+    color: rgb(0, 0, 0);
+    font-family: Montserrat, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+      "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  }
+  #tutorNav .navbar-nav .nav-item .nav-link.active,
+  #tutorNav .navbar-nav .nav-item .nav-link:hover {
+    color: #fed136;
+  }
+  @media (min-width: 992px) {
+    #tutorNav {
+      padding-top: 0;
+      padding-bottom: 0;
+      transition: padding-top 0.3s, padding-bottom 0.3s;
+      border: none;
+      background-color: #f8f9fa;
+    }
+    #tutorNav .navbar-brand {
+      font-size: 1.75em;
+      transition: all 0.3s;
+    }
+    #tutorNav .navbar-nav .nav-item .nav-link {
+      padding: 1.1em 1em !important;
+    }
+    #tutorNav.navbar-shrink {
+      padding-top: 0;
+      padding-bottom: 0;
+      background-color: #f8f9fa;
+    }
+    #tutorNav.navbar-shrink .navbar-brand {
+      font-size: 1.25em;
+      padding: 12px 0;
+    }
+  }
+
+  .logo-block:hover {
+    text-decoration: none;
+  }
+
+</style>
+
+<nav
+  class="navbar navbar-expand-lg navbar-light fixed-top tutor-nav "
+  id="tutorNav"
+>
+  <div class="container">
+    <a class="logo-block js-scroll-trigger" href="/">
+      <i class="fas fa-cube fa-2x" style="color:#fed136"></i>
+      <div
+        class="navbar-brand font-weight-bold ml-1 ml-xl-1 js-scroll-trigger mt-2"
+        style="font-size: 150%"
+        id="logo"
+      >
+        <h4 class="inline">SideTutor</h4>
+      </div>
+    </a>
+
+    <button
+      class="navbar-toggler navbar-toggler-right"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarResponsive"
+      aria-controls="navbarResponsive"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      Menu
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="#services">Services</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="#portfolio">Portfolio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="#about">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="#team">Team</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

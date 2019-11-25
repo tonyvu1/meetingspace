@@ -1,51 +1,85 @@
-
-
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-  <div class="container">
-    <div class="logo-block">
-        <i class="fas fa-cube fa-2x" style="color:#fed136"></i>
-      <a
-        class="navbar-brand font-weight-bold ml-1 ml-xl-1 js-scroll-trigger mt-2"
-        href="#page-top"
-        style="font-size: 150%"
-        id="logo"
-      >
-        
-        <h4 class="inline">SideTutor</h4>
-      </a>
-      
-    </div>
-
-    <button
-      class="navbar-toggler navbar-toggler-right"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarResponsive"
-      aria-controls="navbarResponsive"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
+  <a class="logo-block js-scroll-trigger ml-2" href="#page-top">
+    <i class="fas fa-cube fa-2x" style="color:#fed136"></i>
+    <div
+      class="navbar-brand font-weight-bold ml-1 ml-xl-1 js-scroll-trigger mt-1"
+      style="font-size: 150%"
+      id="logo"
     >
-      Menu
-      <i class="fas fa-bars"></i>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarResponsive">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href="#services">Services</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href="#portfolio">Portfolio</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href="#about">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href="#team">Team</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
-        </li>
-      </ul>
+      <h4 class="logo-home" style="font-size: 1.8rem; color: #474747">
+        SideTutor
+      </h4>
     </div>
+  </a>
+
+  <button
+    class="navbar-toggler navbar-toggler-right"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarResponsive"
+    aria-controls="navbarResponsive"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    Menu
+    <i class="fas fa-bars"></i>
+  </button>
+  <div class="collapse navbar-collapse ml-auto" id="navbarResponsive">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link js-scroll-trigger" href="#services">Mission</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link js-scroll-trigger" href="#portfolio">Plans</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link js-scroll-trigger" href="#team">Tutors</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
+      </li>
+
+      <li class="nav-item dropdown divider-vertical" id="nav-divide">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            English
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">English</a>
+            <a class="dropdown-item" href="#">Ti&#7871;ng Vi&#7879;t</a>
+          </div>
+        </li>
+
+      <li class="nav-item dropdown mr-4">
+        <a
+          class="nav-link dropdown-toggle"
+          href="#"
+          id="navbarDropdown"
+          role="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          Login
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Students</a>
+          <a class="dropdown-item" href="#">Tutors</a>
+        </div>
+      </li>
+    </ul>
   </div>
 </nav>
+
+<style>
+ #nav-divide {
+   margin-left: 4vw;
+ }
+</style>

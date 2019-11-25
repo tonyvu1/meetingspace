@@ -1,16 +1,18 @@
 <header>
-  <% include partials/nav2.ejs %>
+  <% include partials/nav_tutor.ejs %>
+  <% include partials/nav.ejs %>
 </header>
 
 <style>
-  #chat-body {
-    border: 1px solid rgb(165, 165, 165);
+  #mainNav {
+    display: none;
+  }
 
-    box-shadow: rgba(156, 172, 172, 0.2) 0px 2px 2px,
-      rgba(156, 172, 172, 0.2) 0px 4px 4px, rgba(156, 172, 172, 0.2) 0px 8px 8px,
-      rgba(156, 172, 172, 0.2) 0px 16px 16px,
-      rgba(156, 172, 172, 0.2) 0px 32px 32px,
-      rgba(156, 172, 172, 0.2) 0px 64px 64px;
+  #chat-body {
+    border: 1px solid rgb(212, 212, 212);
+
+    -webkit-box-shadow: 2px 0px 15px -5px rgba(0, 0, 0, 0.26);
+    box-shadow: 2px 0px 15px -5px rgba(0, 0, 0, 0.26);
   }
 
   .chat {
@@ -82,75 +84,91 @@
   }
 
   #button-preview {
-    opacity: 0;
+    opacity: 100;
   }
+
+  .wrapper-section {
+  padding: 8vh 0 0;
+}
+
 </style>
 
-<div onLoad="document.getElementById('button-preview').click();">
-  <div class="col-12 mt-3" id="classroom-container">
-    <div class="row justify-content-center">
-      <div class="col-lg-7 col-xm-12 mr-3" id="remote-media">
-        <div id="local-media"></div>
-      </div>
+<script>
+  window.onload = function() {
+    document.getElementById("button-preview").click();
+  };
+</script>
+<section class="wrapper-section">
+  <div>
+    <div class="col-12 mt-0" id="classroom-container">
+      <div class="row justify-content-center">
+        <div class="col-lg-7 col-xm-12 mr-3" id="remote-media">
+          <div id="local-media"></div>
+        </div>
 
-      <div class="col-lg-4 col-sm-12" id="chat-wrapper">
-        <div class="col-md-12" id="chat-body">
-          <div class="panel panel-primary">
-            <div class="panel-heading text-center">
-              <span class="glyphicon glyphicon-comment"></span>
-              <strong>&#160;</strong>
-            </div>
-            <div class="panel-body body-panel">
-              <ul class="chat"></ul>
-            </div>
-            <div class="panel-footer clearfix">
-              <input id="message" class="form-control" type="text" />
-              <span
-                class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-xs-12"
-                style="margin-top: 10px"
-              >
-                <button class="btn btn-warning btn-lg btn-block" id="btn-chat">
-                  Send
-                </button>
-              </span>
+        <div class="col-lg-4 col-sm-12 mt-1" id="chat-wrapper">
+          <div class="col-md-12" id="chat-body">
+            <div class="panel panel-primary">
+              <div class="panel-heading text-center">
+                <span class="glyphicon glyphicon-comment"></span>
+                <strong>&#160;</strong>
+              </div>
+              <div class="panel-body body-panel">
+                <ul class="chat"></ul>
+              </div>
+              <div class="panel-footer clearfix">
+                <input id="message" class="form-control" type="text" />
+                <span
+                  class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-xs-12"
+                  style="margin-top: 10px"
+                >
+                  <button
+                    class="btn btn-warning btn-lg btn-block"
+                    id="btn-chat"
+                  >
+                    Send
+                  </button>
+                </span>
+              </div>
             </div>
           </div>
+
+          <p class="text-right">
+            <a
+              class="btn btn-secondary mt-2 pull-right"
+              data-toggle="collapse"
+              href="#viewLog"
+              role="button"
+              aria-expanded="false"
+            >
+              Connection Info
+            </a>
+          </p>
+          <div class="collapse" id="viewLog">
+            <div class="col-md-12 mt-2" id="log"></div>
+          </div>
         </div>
-
-        <p class="text-right">
-          <a class="btn btn-primary mt-2 pull-right" data-toggle="collapse" href="#viewLog" role="button" aria-expanded="false">
-            Connection Info
-          </a>
-        </p>
-        <div class="collapse" id="viewLog">
-          <div class="col-md-12 mt-2" id="log"></div>
-        </div>
-
-
       </div>
     </div>
-  </div>
 
-  <div id="controls">
-    <div id="room-controls">
-      <p class="instructions">Room Name:</p>
+    <div id="controls">
+      <div id="room-controls">
+        <p class="instructions">Room Name:</p>
 
-      <input id="room-name" type="text" value="<%= room %>" readonly />
-      <button id="button-join">Begin Class</button>
-      <button id="button-leave">Leave Class</button>
+        <input id="room-name" type="text" value="<%= room %>" readonly />
+        <button id="button-join">Begin Class</button>
+        <button id="button-leave">Leave Class</button>
+      </div>
     </div>
 
-    
+    <%# DONT DELETE %>
+    <button id="button-preview">Preview My Camera</button>
+
+    <script src="/style/jquery/jquery.min.js"></script>
+    <script src="/style/scripts/twilio_video.js"></script>
+    <script src="https://media.twiliocdn.com/sdk/js/chat/v1.1/twilio-chat.min.js"></script>
   </div>
-
-  <%# DONT DELETE %>
-  <button id="button-preview">Preview My Camera</button>
-
-  <script src="/style/jquery/jquery.min.js"></script>
-  <script src="/style/scripts/twilio_video.js"></script>
-  <script src="https://media.twiliocdn.com/sdk/js/chat/v1.1/twilio-chat.min.js"></script>
-</div>
-
+</section>
 <style>
   #log {
     border: 1px solid #686865;
