@@ -6,7 +6,7 @@ var favicon = require("serve-favicon");
 const app = express();
 const twilio = require('twilio')
 /******************** FORCE HTTPS (UNCOMMENT WHEN DEPLOY) *********************/
-
+/*
 app.use((req, res, next) => {
   if (req.header("x-forwarded-proto") !== "https") {
     res.redirect(`https://${req.header("host")}${req.url}`);
@@ -40,7 +40,7 @@ var https_redirect = function(req, res, next) {
   }
 };
 app.use(https_redirect);  
-
+*/
 /***************************** TWILIO CHAT *******************************/
 const AccessToken = twilio.jwt.AccessToken;
 const ChatGrant = AccessToken.ChatGrant;
@@ -141,19 +141,7 @@ app.use("/animations", express.static(__dirname + "/views"));
 
 // TEST
 
-app.get("/chat1", (req, res) => {
-  res.render("chat1", { title: "Classroom | SideTutor" });
-});
 
-app.get("/chat3", (req, res) => {
-  res.render("scaledrone", {
-    title: "Scaledrone 2 | SideTutor",
-    scaledrone: process.env.SCALEDRONE_ID,
-    stun_url: process.env.STUN_URL,
-    stun_user: process.env.STUN_USER,
-    stun_cred: process.env.STUN_CRED
-  });
-});
 
 /***************************** TWILIO VIDEO *******************************/
 const MAX_ALLOWED_SESSION_DURATION = 14400;
@@ -189,12 +177,7 @@ app.get('/tokenVideo', function(request, response) {
 });
 
 
-app.get("/class", function(req, res) {
-  res.render("classroom_tutor", {
-    title: "Classroom | SideTutor",
-    room: "Room1"
-  });
-});
+
 
 
 const PORT = process.env.PORT || 5000;

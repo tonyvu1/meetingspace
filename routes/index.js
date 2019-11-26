@@ -93,7 +93,7 @@ router.get("/logout", (req, res) => {
 });
 
 // GETTING SIGN UP PAGE
-router.get("/signup", (req, res) => {
+router.get("/signup", ensureAuthenticated, (req, res) => {
   if (req.user) {
     res.redirect("/dashboard");
   } else {
