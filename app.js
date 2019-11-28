@@ -6,7 +6,7 @@ var favicon = require("serve-favicon");
 const app = express();
 const twilio = require('twilio')
 /******************** FORCE HTTPS (UNCOMMENT WHEN DEPLOY) *********************/
-/*
+
 app.use((req, res, next) => {
   if (req.header("x-forwarded-proto") !== "https") {
     res.redirect(`https://${req.header("host")}${req.url}`);
@@ -40,7 +40,7 @@ var https_redirect = function(req, res, next) {
   }
 };
 app.use(https_redirect);  
-*/
+
 /***************************** TWILIO CHAT *******************************/
 const AccessToken = twilio.jwt.AccessToken;
 const ChatGrant = AccessToken.ChatGrant;
@@ -177,7 +177,12 @@ app.get('/tokenVideo', function(request, response) {
 });
 
 
-
+app.get("/class", function(req, res) {
+  res.render("classroom_tutor", {
+    title: "Classroom | SideTutor",
+    room: "Room1"
+  });
+});
 
 
 const PORT = process.env.PORT || 5000;

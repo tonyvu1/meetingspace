@@ -5,12 +5,7 @@ const Meeting = require("../models/Meeting");
 
 
 
-router.get("/class", ensureAuthenticated, function(req, res) {
-    res.render("classroom_tutor", {
-      title: "Classroom | SideTutor",
-      room: "Room1"
-    });
-  });
+
 
   router.get("/chat1", ensureAuthenticated, (req, res) => {
     res.render("chat1", { title: "Classroom | SideTutor" });
