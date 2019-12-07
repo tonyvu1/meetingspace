@@ -1,6 +1,5 @@
 <header>
-  <% include partials/nav_tutor.ejs %>
-  <% include partials/nav.ejs %>
+  <% include partials/nav_tutor.ejs %> <% include partials/nav.ejs %>
 </header>
 
 <style>
@@ -72,11 +71,6 @@
     box-shadow: 2px 0px 15px -5px rgba(0, 0, 0, 0.26);
   }
 
-  div#remote-media {
-    background-image: url("/images/xlsoon.png");
-    background-repeat: no-repeat;
-  }
-
   div#remote-media video {
     width: 100%;
     height: 100%;
@@ -88,9 +82,8 @@
   }
 
   .wrapper-section {
-  padding: 8vh 0 0;
-}
-
+    padding: 8vh 0 0;
+  }
 </style>
 
 <script>
@@ -153,11 +146,13 @@
 
     <div id="controls">
       <div id="room-controls">
-        <p class="instructions">Room Name:</p>
+        <button class="btn btn-primary mt-2 pull-right" id="button-join">
+          Begin Meeting
+        </button>
 
-        <input id="room-name" type="text" value="<%= room %>" readonly />
-        <button id="button-join">Begin Class</button>
-        <button id="button-leave">Leave Class</button>
+        <input id="room-name" type="text" value="Meeting" readonly />
+
+        <button class="btn btn-secondary mt-2 pull-right" id="button-leave">Leave Meeting</button>
       </div>
     </div>
 
@@ -170,6 +165,16 @@
   </div>
 </section>
 <style>
+
+  #button-join {  
+    margin-left: 4.5rem;
+  }
+
+  #room-name,
+  #button-preview {
+    opacity: 0;
+  }
+
   #log {
     border: 1px solid #686865;
     height: 15em;
@@ -279,7 +284,10 @@
 
     function chatSetupCompleted() {
       let template = $("#new-message").html();
-      template = template.replace("{{body}}", "<b>Welcome to class!</b>");
+      template = template.replace(
+        "{{body}}",
+        "<b>Let's start the meeting!</b>"
+      );
 
       $(".chat").append(template);
     }

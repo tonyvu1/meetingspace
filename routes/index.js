@@ -70,7 +70,7 @@ router.get("/dashboard", ensureAuthenticated, (req, res) => {
 // GETTING LOGIN PAGE
 router.get("/login", (req, res) => {
   if (req.user) {
-    res.redirect("/dashboard");
+    res.redirect("/meetings/meeting");
   } else {
     res.render("login", { title: "Login | SideTutor" });
   }
@@ -79,7 +79,7 @@ router.get("/login", (req, res) => {
 // POSTING TO LOGIN PAGE TO LOG IN USER
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", {
-    successRedirect: "/dashboard",
+    successRedirect: "/meetings/meeting",
     failureRedirect: "/login",
     failureFlash: true
   })(req, res, next);
@@ -93,9 +93,9 @@ router.get("/logout", (req, res) => {
 });
 
 // GETTING SIGN UP PAGE
-router.get("/signup", ensureAuthenticated, (req, res) => {
+router.get("/signup", (req, res) => {
   if (req.user) {
-    res.redirect("/dashboard");
+    res.redirect("/meetings/meeting");
   } else {
     res.render("signup", { title: "Sign Up | SideTutor" });
   }

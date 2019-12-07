@@ -47,6 +47,12 @@ router.post("/delete", ensureAuthenticated, (req, res) => {
   }
 });
 
+router.get("/meeting", function(req, res) {
+  res.render("meeting", {
+    title: "Meeting Space"
+  });
+});
+
 /* 
 
 router.post("/create", ensureAuthenticated, (req, res) => {

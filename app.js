@@ -177,12 +177,6 @@ app.get('/tokenVideo', function(request, response) {
 });
 
 
-app.get("/class", function(req, res) {
-  res.render("classroom_tutor", {
-    title: "Classroom | SideTutor",
-    room: "Room1"
-  });
-});
 
 
 const PORT = process.env.PORT || 5000;
