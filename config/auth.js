@@ -5,7 +5,7 @@ module.exports = {
     if (req.isAuthenticated()) {
       return next();
     }
-    req.flash("error_msg", "Please log in to view your dashboard.");
+    req.flash("error_msg", "Please log in to go to meeting.");
     res.redirect("/login");
   },
 

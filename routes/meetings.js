@@ -36,7 +36,7 @@ router.post("/create", ensureAuthenticated, (req, res) => {
 router.post("/delete", ensureAuthenticated, (req, res) => {
   if (req.user.role === "Tutor" || "Admin") {
     MongoClient.connect(url, { useUnifiedTopology: true }, (err, db) => {
-      db.db("sidetutor")
+      db.db("MeetingSpace")
         .collection("meetings")
         .deleteOne({ _id: ObjectId(req.body._id) });
 
@@ -47,12 +47,21 @@ router.post("/delete", ensureAuthenticated, (req, res) => {
   }
 });
 
-router.get("/meeting", function(req, res) {
+/* router.get("/meeting", ensureAuthenticated, function(req, res) {
   res.render("meeting", {
     title: "Meeting Space"
   });
-});
+}); */
 
+router.get("/meeting", ensureAuthenticated, (req, res) => {
+  res.render("scaledrone", {
+    title: "Meeting | MeetingSpace",
+    scaledrone: process.env.SCALEDRONE_ID,
+    stun_url: process.env.STUN_URL,
+    stun_user: process.env.STUN_USER,
+    stun_cred: process.env.STUN_CRED
+  });
+});
 /* 
 
 router.post("/create", ensureAuthenticated, (req, res) => {
@@ -85,7 +94,7 @@ router.post("/delete", ensureAuthenticated, (req, res) => {
    
 
 
-    db.db('sidetutor').collection('meetings').deleteOne({ _id: ObjectId(req.body._id) });
+    db.db('MeetingSpace').collection('meetings').deleteOne({ _id: ObjectId(req.body._id) });
 
 
     res.redirect("/dashboard");

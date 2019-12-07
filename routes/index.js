@@ -7,7 +7,7 @@ const { ensureAuthenticated, forwardAuthenticated } = require("../config/auth");
 const Meeting = require("../models/Meeting");
 
 router.get("/", (req, res) => {
-  res.render("home", { title: "Learn English Online | SideTutor" });
+  res.render("home", { title: "MeetingSpace" });
 });
 
 router.get("/admin", ensureAuthenticated, (req, res) => {
@@ -17,7 +17,7 @@ router.get("/admin", ensureAuthenticated, (req, res) => {
       .exec((err, meetings) => {
         res.render("dashboard_admin", {
           meetings: meetings,
-          title: "Tutor Dashboard | SideTutor"
+          title: "Tutor Dashboard | MeetingSpace"
         });
       });
   } else if (req.user.role === "Tutor") {
@@ -26,12 +26,12 @@ router.get("/admin", ensureAuthenticated, (req, res) => {
       .exec((err, meetings) => {
         res.render("dashboard_tutor", {
           meetings: meetings,
-          title: "Tutor Dashboard | SideTutor"
+          title: "Tutor Dashboard | MeetingSpace"
         });
       });
   } else if (req.user.role === "Student") {
     res.render("dashboard_student", {
-      title: "Student | SideTutor",
+      title: "Student | MeetingSpace",
       name: req.user.name // has to be "user" here. user is global language specific var
     });
   } else {
@@ -47,7 +47,7 @@ router.get("/dashboard", ensureAuthenticated, (req, res) => {
       .exec((err, meetings) => {
         res.render("dashboard_admin", {
           meetings: meetings,
-          title: "Tutor Dashboard | SideTutor"
+          title: "Tutor Dashboard | MeetingSpace"
         });
       });
   } else if (req.user.role === "Tutor") {
@@ -56,12 +56,12 @@ router.get("/dashboard", ensureAuthenticated, (req, res) => {
       .exec((err, meetings) => {
         res.render("dashboard_tutor", {
           meetings: meetings,
-          title: "Tutor Dashboard | SideTutor"
+          title: "Tutor Dashboard | MeetingSpace"
         });
       });
   } else {
     res.render("dashboard_student", {
-      title: "Student | SideTutor",
+      title: "Student | MeetingSpace",
       name: req.user.name // has to be "user" here. user is global language specific var
     });
   }
@@ -72,7 +72,7 @@ router.get("/login", (req, res) => {
   if (req.user) {
     res.redirect("/meetings/meeting");
   } else {
-    res.render("login", { title: "Login | SideTutor" });
+    res.render("login", { title: "Login | MeetingSpace" });
   }
 });
 
@@ -97,7 +97,7 @@ router.get("/signup", (req, res) => {
   if (req.user) {
     res.redirect("/meetings/meeting");
   } else {
-    res.render("signup", { title: "Sign Up | SideTutor" });
+    res.render("signup", { title: "Sign Up | MeetingSpace" });
   }
 });
 
@@ -133,7 +133,7 @@ router.post("/signup", (req, res) => {
       email,
       password,
       password2,
-      title: "Sign Up | SideTutor"
+      title: "Sign Up | MeetingSpace"
     });
   } else {
     // Register form success
@@ -150,7 +150,7 @@ router.post("/signup", (req, res) => {
           email,
           password,
           password2,
-          title: "Sign Up | SideTutor"
+          title: "Sign Up | MeetingSpace"
         });
       } else {
         // All went well, now creating a new user

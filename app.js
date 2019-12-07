@@ -22,7 +22,7 @@ app.use(function(req, res, next) {
     process.env.NODE_ENV === "production" &&
     req.headers["x-forwarded-proto"] !== "https"
   ) {
-    sslUrl = ["https://sidetutor.com", req.url].join("");
+    sslUrl = ["https://meetingspace.com", req.url].join("");
     return res.redirect(sslUrl);
   }
 
@@ -45,7 +45,7 @@ app.use(https_redirect);
 const AccessToken = twilio.jwt.AccessToken;
 const ChatGrant = AccessToken.ChatGrant;
 var VideoGrant = AccessToken.VideoGrant;
-const MAX_ALLOWED_SESSION_DURATION_CHAT = 3600; // 1 hour
+const MAX_ALLOWED_SESSION_DURATION_CHAT = 3600; 
 
 app.get("/tokenChat", function(req, res) {
   let username = req.query.username;
@@ -144,7 +144,7 @@ app.use("/animations", express.static(__dirname + "/views"));
 
 
 /***************************** TWILIO VIDEO *******************************/
-const MAX_ALLOWED_SESSION_DURATION = 14400;
+const MAX_ALLOWED_SESSION_DURATION = 10;
 
 
 var VideoGrant = AccessToken.VideoGrant;

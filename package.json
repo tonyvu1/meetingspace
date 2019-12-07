@@ -1,5 +1,5 @@
 {
-  "name": "sidetutor",
+  "name": "meetingspace",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tonyvu1/sidetutor.git"
+    "url": "git+https://github.com/tonyvu1/meetingspace.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/tonyvu1/sidetutor/issues"
+    "url": "https://github.com/tonyvu1/meetingspace/issues"
   },
-  "homepage": "https://github.com/tonyvu1/sidetutor#readme",
+  "homepage": "https://github.com/tonyvu1/meetingspace#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "connect-flash": "^0.1.1",

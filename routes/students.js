@@ -10,7 +10,7 @@ router.get("/chat", ensureAuthenticated, (req, res) => {
 
   if(req.user.role === "Student") {
     res.render("chat2", {
-      title: "Scaledrone 1 | SideTutor",
+      title: "Scaledrone 1 | MeetingSpace",
       scaledrone: process.env.SCALEDRONE_ID,
       stun_url: process.env.STUN_URL,
       stun_user: process.env.STUN_USER,
