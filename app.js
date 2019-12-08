@@ -5,7 +5,7 @@ const passport = require("passport");
 var favicon = require("serve-favicon");
 const app = express();
 const twilio = require('twilio')
-/******************** FORCE HTTPS (UNCOMMENT WHEN DEPLOY) *********************
+/******************** FORCE HTTPS (UNCOMMENT WHEN DEPLOY) *********************/
 
 app.use((req, res, next) => {
   if (req.header("x-forwarded-proto") !== "https") {
