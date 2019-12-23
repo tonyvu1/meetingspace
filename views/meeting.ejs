@@ -152,7 +152,7 @@
 
         <input id="room-name" type="text" value="Meeting" readonly />
 
-        <button class="btn btn-secondary mt-2 pull-right" id="button-leave">
+        <button class="btn btn-secondary mt-2 pull-left" id="button-leave">
           Leave Meeting
         </button>
       </div>
@@ -169,6 +169,14 @@
 <style>
   #button-join {
     margin-left: 4.5rem;
+    z-index: 5;
+  }
+
+  #button-leave {
+    position: absolute;
+    margin-left: 4.5rem;
+    left: 0;
+    display: none;
   }
 
   #room-name,
@@ -207,7 +215,7 @@
 
 <script>
   $(document).ready(function() {
-    let username = "tony";
+    let username = "<%= name %>";
     let chatChannel;
 
     getToken()

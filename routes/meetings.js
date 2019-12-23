@@ -54,12 +54,12 @@ router.post("/delete", ensureAuthenticated, (req, res) => {
 }); */
 
 router.get("/meeting", ensureAuthenticated, (req, res) => {
-  res.render("scaledrone", {
+  res.render("meeting", {
     title: "Meeting | MeetingSpace",
-    scaledrone: process.env.SCALEDRONE_ID,
     stun_url: process.env.STUN_URL,
     stun_user: process.env.STUN_USER,
-    stun_cred: process.env.STUN_CRED
+    stun_cred: process.env.STUN_CRED,
+    name: req.user.name
   });
 });
 /* 

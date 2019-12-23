@@ -5,7 +5,7 @@ const passport = require("passport");
 var favicon = require("serve-favicon");
 const app = express();
 const twilio = require('twilio')
-/******************** FORCE HTTPS (UNCOMMENT WHEN DEPLOY) *********************/
+/******************** FORCE HTTPS (UNCOMMENT WHEN DEPLOY) *********************
 
 app.use((req, res, next) => {
   if (req.header("x-forwarded-proto") !== "https") {
@@ -41,7 +41,7 @@ var https_redirect = function(req, res, next) {
 };
 app.use(https_redirect);  
 
-/***************************** TWILIO CHAT *******************************/
+***************************** TWILIO CHAT *******************************/
 const AccessToken = twilio.jwt.AccessToken;
 const ChatGrant = AccessToken.ChatGrant;
 var VideoGrant = AccessToken.VideoGrant;
