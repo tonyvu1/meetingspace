@@ -41,7 +41,7 @@ var https_redirect = function(req, res, next) {
 };
 app.use(https_redirect);  
 
-/***************************** TWILIO CHAT *******************************/
+/***************************** TWILIO CHAT ********************************/
 const AccessToken = twilio.jwt.AccessToken;
 const ChatGrant = AccessToken.ChatGrant;
 var VideoGrant = AccessToken.VideoGrant;
