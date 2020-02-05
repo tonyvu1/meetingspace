@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 var favicon = require("serve-favicon");
 const app = express();
-const twilio = require('twilio')
+const twilio = require("twilio");
 /******************** FORCE HTTPS (UNCOMMENT WHEN DEPLOY) *********************/
 
 app.use((req, res, next) => {
@@ -42,10 +42,11 @@ var https_redirect = function(req, res, next) {
 app.use(https_redirect);  
 
 /***************************** TWILIO CHAT ********************************/
+// This section handles the token sent from meeting.ejs template.
 const AccessToken = twilio.jwt.AccessToken;
 const ChatGrant = AccessToken.ChatGrant;
 var VideoGrant = AccessToken.VideoGrant;
-const MAX_ALLOWED_SESSION_DURATION_CHAT = 3600; 
+const MAX_ALLOWED_SESSION_DURATION_CHAT = 3600;
 
 app.get("/tokenChat", function(req, res) {
   let username = req.query.username;
@@ -67,8 +68,7 @@ app.get("/tokenChat", function(req, res) {
   token.addGrant(videoGrant);
   const tokenJwt = token.toJwt();
   res.send(tokenJwt);
-}); 
-
+});
 
 /***************************** HANDLE PRODUCTION *******************************/
 if (process.env.NODE_ENV !== "production") {
@@ -130,28 +130,25 @@ app.use(function(req, res, next) {
 
 // Routes
 app.use("/", require("./routes/index"));
-app.use("/images", express.static(__dirname + "/public/images"));
-app.use("/students", require("./routes/students"));
-app.use("/tutors", require("./routes/tutors"));
 app.use("/meetings", require("./routes/meetings"));
+
+// Set static folders
+app.use("/images", express.static(__dirname + "/public/images"));
 app.use("/style", express.static(__dirname + "/public/style"));
 app.use("/scripts", express.static(__dirname + "/scripts"));
 app.use("/config", express.static(__dirname + "/config"));
 app.use("/animations", express.static(__dirname + "/views"));
 
-// TEST
-
-
-
 /***************************** TWILIO VIDEO *******************************/
+// This section handles the token sent from meeting.ejs.
 const MAX_ALLOWED_SESSION_DURATION = 10;
-
-
 var VideoGrant = AccessToken.VideoGrant;
 
-app.get('/tokenVideo', function(request, response) {
- // var identity = request.user.name;
- var identity = Math.random().toString(36).substring(7);
+app.get("/tokenVideo", function(request, response) {
+  // var identity = request.user.name;
+  var identity = Math.random()
+    .toString(36)
+    .substring(7);
 
   // Create an access token which we will sign and return to the client,
   // containing the grant we just created.
@@ -176,10 +173,5 @@ app.get('/tokenVideo', function(request, response) {
   });
 });
 
-
-
-
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
-

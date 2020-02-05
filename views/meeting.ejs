@@ -1,5 +1,5 @@
 <header>
-  <% include partials/nav_tutor.ejs %> <% include partials/nav.ejs %>
+  <% include partials/nav_meeting.ejs %>
 </header>
 
 <style>
@@ -9,7 +9,6 @@
 
   #chat-body {
     border: 1px solid rgb(212, 212, 212);
-
     -webkit-box-shadow: 2px 0px 15px -5px rgba(0, 0, 0, 0.26);
     box-shadow: 2px 0px 15px -5px rgba(0, 0, 0, 0.26);
   }
@@ -158,14 +157,14 @@
       </div>
     </div>
 
-    <%# DONT DELETE %>
-    <button id="button-preview">Preview My Camera</button>
-
     <script src="/style/jquery/jquery.min.js"></script>
+
+    <!-- The video meeting works with Twilio_Video API, which is housed at style/scripts/twilio_video. -->
     <script src="/style/scripts/twilio_video.js"></script>
     <script src="https://media.twiliocdn.com/sdk/js/chat/v1.1/twilio-chat.min.js"></script>
   </div>
 </section>
+
 <style>
   #button-join {
     margin-left: 4.5rem;
@@ -213,6 +212,9 @@
   </li>
 </script>
 
+<%# This script is borrowed from a working example of Twilio chat. I just
+customized it so that the username is the user that is currently logged into
+site. %>
 <script>
   $(document).ready(function() {
     let username = "<%= name %>";
@@ -273,13 +275,6 @@
         .then(channel => channel)
         .catch(error => console.log("error getting channel", error) || error);
     }
-
-    /*
-     .getChannelByUniqueName("chat3channel")
-        .then(channel => channel)
-        .catch(error => console.log("error getting channel", error) || error);
-
-    */
 
     function onMessageAdded(message) {
       let template = $("#new-message").html();

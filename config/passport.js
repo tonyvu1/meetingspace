@@ -1,4 +1,3 @@
-
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
 
@@ -24,7 +23,10 @@ module.exports = function(passport) {
             if (isMatch) {
               return done(null, user);
             } else {
-              return done(null, false, { message: "Your email and password combination does not match an account."});
+              return done(null, false, {
+                message:
+                  "Your email and password combination does not match an account."
+              });
             }
           });
         })
@@ -42,4 +44,3 @@ module.exports = function(passport) {
     });
   });
 };
-

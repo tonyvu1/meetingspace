@@ -1,8 +1,8 @@
 <style>
-  #tutorNav {
+  #navMeeting {
     background-color: #f8f9fa;
   }
-  #tutorNav .navbar-toggler {
+  #navMeeting .navbar-toggler {
     font-size: 12px;
     right: 0;
     padding: 13px;
@@ -14,19 +14,19 @@
       Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   }
-  #tutorNav .navbar-brand {
+  #navMeeting .navbar-brand {
     color: #212529;
     font-family: Montserrat, -apple-system, BlinkMacSystemFont, "Segoe UI",
       Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   }
-  #tutorNav .navbar-brand.active,
-  #tutorNav .navbar-brand:active,
-  #tutorNav .navbar-brand:focus,
-  #tutorNav .navbar-brand:hover {
+  #navMeeting .navbar-brand.active,
+  #navMeeting .navbar-brand:active,
+  #navMeeting .navbar-brand:focus,
+  #navMeeting .navbar-brand:hover {
     color: #000000;
   }
-  #tutorNav .navbar-nav .nav-item .nav-link {
+  #navMeeting .navbar-nav .nav-item .nav-link {
     font-size: 100%;
     font-weight: 400;
     padding: 0.75em 0;
@@ -36,31 +36,31 @@
       Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   }
-  #tutorNav .navbar-nav .nav-item .nav-link.active,
-  #tutorNav .navbar-nav .nav-item .nav-link:hover {
+  #navMeeting .navbar-nav .nav-item .nav-link.active,
+  #navMeeting .navbar-nav .nav-item .nav-link:hover {
     color: #fed136;
   }
   @media (min-width: 992px) {
-    #tutorNav {
+    #navMeeting {
       padding-top: 0;
       padding-bottom: 0;
       transition: padding-top 0.3s, padding-bottom 0.3s;
       border: none;
       background-color: #f8f9fa;
     }
-    #tutorNav .navbar-brand {
+    #navMeeting .navbar-brand {
       font-size: 1.75em;
       transition: all 0.3s;
     }
-    #tutorNav .navbar-nav .nav-item .nav-link {
+    #navMeeting .navbar-nav .nav-item .nav-link {
       padding: 1.1em 1em !important;
     }
-    #tutorNav.navbar-shrink {
+    #navMeeting.navbar-shrink {
       padding-top: 0;
       padding-bottom: 0;
       background-color: #f8f9fa;
     }
-    #tutorNav.navbar-shrink .navbar-brand {
+    #navMeeting.navbar-shrink .navbar-brand {
       font-size: 1.25em;
       padding: 12px 0;
     }
@@ -69,34 +69,28 @@
   .logo-block:hover {
     text-decoration: none;
   }
-
 </style>
 
 <nav
   class="navbar navbar-expand-lg navbar-light fixed-top tutor-nav "
-  id="tutorNav"
+  id="navMeeting"
 >
-  
-    <a class="logo-block js-scroll-trigger" href="/">
-      <i class="fas fa-cube fa-2x" style="color:#fed136"></i>
-      <div
-        class="navbar-brand font-weight-bold ml-1 ml-xl-1 js-scroll-trigger mt-2"
-        style="font-size: 150%"
-        id="logo"
-      >
-        <h4 class="inline">MeetingSpace</h4>
-      </div>
-    </a>
+  <a class="logo-block js-scroll-trigger" href="/">
+    <i class="fas fa-cube fa-2x" style="color:#fed136"></i>
+    <div
+      class="navbar-brand font-weight-bold ml-1 ml-xl-1 js-scroll-trigger mt-2"
+      style="font-size: 150%"
+      id="logo"
+    >
+      <h4 class="inline">MeetingSpace</h4>
+    </div>
+  </a>
 
-    <div class="collapse navbar-collapse ml-auto" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="/logout">Logout</a>
-          </li>
-    
-    
-    
-        </ul>
-      </div>
-
+  <div class="collapse navbar-collapse ml-auto" id="navbarResponsive">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link js-scroll-trigger" href="/logout">Logout</a>
+      </li>
+    </ul>
+  </div>
 </nav>

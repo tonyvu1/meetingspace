@@ -1,4 +1,4 @@
-// This is used for PROTECTED ROUTES
+// This file is used for protecting routes.
 
 module.exports = {
   ensureAuthenticated: function(req, res, next) {
